@@ -59,7 +59,7 @@ Expected output: `Output written on main_<company>_<role>.pdf (2 pages, ...)`. A
     linkcolor=blue,
     filecolor=magenta,
     urlcolor=blue,
-    pdftitle={[YOUR_NAME] - CV},
+    pdftitle={Pablo Santana Susilla - CV},
     % Keep pdfpagemode=UseNone: this block runs after moderncv's own
     % \AtEndPreamble (moderncv.cls sets pdfpagemode there), so a FullScreen
     % value here would win and open every CV in fullscreen presentation mode.
@@ -69,13 +69,12 @@ Expected output: `Output written on main_<company>_<role>.pdf (2 pages, ...)`. A
 \usepackage{import}
 
 % Personal data
-\name{[FIRST_NAME]}{[LAST_NAME]}
+\name{Pablo}{Santana Susilla}
 % If you have no address to list, DELETE this whole line. \address{}{}{} fails
 % with "There's no line here to end" on every moderncv version.
-\address{[YOUR_ADDRESS]}{}{}
-\phone[mobile]{[YOUR_PHONE]}
-\email{[YOUR_EMAIL]}
-\extrainfo{\href{[YOUR_LINKEDIN_URL]}{LinkedIn}, \href{[YOUR_GITHUB_URL]}{GitHub}}
+\address{Las Palmas de Gran Canaria, Canarias, España}{}{}
+\email{pasantanasu@hotmail.com}
+\extrainfo{\href{https://www.linkedin.com/in/pablo-santana-susilla-092248314}{LinkedIn}}
 
 \begin{document}
 \makecvtitle
@@ -137,11 +136,11 @@ When the role sits outside your home domain, **lead with the domain-transfer arg
 **Create 2-3 profile statement templates for your main role types:**
 
 <!-- SETUP: These are populated based on your background -->
-**For [YOUR_PRIMARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_1]
+**For Odoo developer roles:**
+> Desarrollador Odoo que construye módulos a medida desde cero y los mantiene en producción. Desarrollé la primera versión del módulo de Expedientes de subvenciones, núcleo del ERP Odoo sobre el que opera hoy toda Orbalia (25 personas), y diseñé la migración completa desde ActiveCampaign (más de 7.000 expedientes, 10.000 contactos y 1.200 empresas). Python, Odoo ORM, vistas XML, QWeb, PostgreSQL, API REST y XML-RPC, con despliegue y administración en AWS.
 
-**For [YOUR_SECONDARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_2]
+**For IT / ERP consulting roles:**
+> Ingeniero Informático y consultor IT con experiencia en el programa Kit Consulting asesorando a pymes en la selección e implantación de soluciones digitales, y después desarrollando e implantando un ERP Odoo propio en producción. Recojo requisitos con negocio, diseño el modelo de datos, desarrollo y despliego, por lo que entiendo tanto el código como la conversación con el cliente.
 
 Statements labeled *[Used for: <company>_<role>]* were extracted from archived application drafts by `/setup` Path A. They are **phrasing references, never fact sources**: when drafting from one, every factual claim still comes from `01-candidate-profile.md` - a past tailored draft does not vouch for its own accuracy.
 

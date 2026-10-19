@@ -60,9 +60,9 @@ How well do the required/preferred skills align with the candidate's capabilitie
 | 40-59 | Partial match, significant upskilling needed |
 | 0-39 | Fundamental mismatch |
 
-**Strong match areas:** [YOUR_PRIMARY_SKILLS]
-**Moderate match areas:** [YOUR_SECONDARY_SKILLS]
-**Weak match areas:** [SKILLS_YOU_LACK]
+**Strong match areas:** Odoo module development (ORM, inheritance, computed fields, XML views, QWeb reports, security rules), Python, PostgreSQL, XML-RPC/REST integrations, data migration
+**Moderate match areas:** AWS administration (one production environment), Linux, Git, JavaScript, requirements gathering / IT consulting for SMEs, CCNA-level networking
+**Weak match areas:** Not evidenced in profile: Odoo OWL/frontend frameworks, Docker/Kubernetes/CI-CD, other ERPs (SAP, Dynamics), ML/data science beyond courses, English above Elementary
 
 ### 2. Experience Match (0-100)
 Does work history align with what they're looking for? Match on the function and nature of the work performed, not the literal job title - a "Data Consultant" and a "Data Scientist" role can be functionally identical.
@@ -74,9 +74,9 @@ Does work history align with what they're looking for? Match on the function and
 | 40-59 | Adjacent experience, would need to make the case |
 | 0-39 | Unrelated experience |
 
-**Strong:** [YOUR_DIRECT_EXPERIENCE_DOMAINS]
-**Moderate:** [YOUR_ADJACENT_EXPERIENCE]
-**Entry-level:** [ROLES_WITH_LIMITED_EXPERIENCE]
+**Strong:** Odoo custom development and ERP implementation in production; grant management; accounting/compliance automation; ActiveCampaign-to-Odoo data migration
+**Moderate:** IT consulting for SMEs (Kit Consulting), Python backend/integration work, AWS/Linux administration, Laravel web development
+**Entry-level:** Senior/lead roles (about 1y9m professional experience), pure DevOps/SRE, pure frontend, roles requiring working English
 
 ### 3. Behavioral/Culture Fit (0-100)
 Does the role and company culture match the behavioral profile?
@@ -93,7 +93,7 @@ Does the role and company culture match the behavioral profile?
 ### 4. Location & Logistics (Pass/Fail + Notes)
 - Within commute range: PASS
 - Remote with occasional office: PASS
-- Requires relocation: FAIL (deal-breaker)
+- Requires relocation: acceptable anywhere in Spain (user is open to on-site or remote across Spain); FLAG outside Spain
 - Frequent international travel: FLAG (discuss with user)
 
 ### 5. Career Alignment & Motivation (0-100)
@@ -107,19 +107,19 @@ Does this role advance career goals and contain tasks that energize?
 | 0-39 | Dead end or backwards step |
 
 **Career goals:**
-- [YOUR_CAREER_GOAL_1]
-- [YOUR_CAREER_GOAL_2]
-- [YOUR_CAREER_GOAL_3]
+- Grow as an Odoo developer / technical consultant with more scope and seniority
+- Combine development with client-facing IT/ERP consulting
+- Keep ownership of modules in production (end-to-end delivery)
 
 **Motivation filter:** Evaluate not just whether you *can* do the tasks, but whether the tasks will *energize* you. Consider:
-- Tasks that energize: [YOUR_ENERGIZING_TASKS]
-- Tasks that drain: [YOUR_DRAINING_TASKS]
+- Tasks that energize: designing data models, turning business requirements into working modules, tools used daily by a team (inferred from LinkedIn - confirm)
+- Tasks that drain: not yet provided - ask the user
 - Non-task factors: leadership style, department culture, company values, degree of autonomy
 
 **Life situation alignment:** Consider personal constraints:
-- **Security**: [YOUR_FINANCIAL_SITUATION_CONTEXT]
-- **Flexibility**: [YOUR_SCHEDULE_CONSTRAINTS]
-- **Professional development**: [YOUR_GROWTH_PRIORITIES]
+- **Security**: Currently employed. Hard floor: 26,000 EUR gross/year - reject anything below
+- **Flexibility**: Open to on-site or remote anywhere in Spain
+- **Professional development**: Seniority in Odoo, consulting skills, English (currently Elementary)
 
 ### 6. Salary Benchmark (Optional)
 

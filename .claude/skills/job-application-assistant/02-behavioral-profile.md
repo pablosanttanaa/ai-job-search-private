@@ -4,51 +4,47 @@ framework_version: 1.0.0
 
 # Behavioral Profile
 
-<!-- SETUP: This file is populated by running /setup -->
-<!-- You can use results from PI, DISC, Myers-Briggs, StrengthsFinder, or a self-assessment -->
+*[Inferred from the LinkedIn About section - review before relying on this. No formal assessment (DISC, MBTI, etc.) provided.]*
 
 ## Overview
-[YOUR_NAME]'s behavioral assessment identifies them as a **[PROFILE_TYPE]** pattern. [1-2 SENTENCE_SUMMARY].
+Pablo is an end-to-end **builder-owner**: he gathers requirements from the business team, designs the data model, develops, deploys and maintains in production. He combines technical depth with a consultant's client conversation skills.
 
 ## Core Behavioral Drives
 
 | Drive | Level | Meaning |
 |-------|-------|---------|
-| [DRIVE_1] | [LEVEL] | [DESCRIPTION] |
-| [DRIVE_2] | [LEVEL] | [DESCRIPTION] |
-| [DRIVE_3] | [LEVEL] | [DESCRIPTION] |
-| [DRIVE_4] | [LEVEL] | [DESCRIPTION] |
+| Ownership | High | Takes modules from requirements to production and keeps maintaining them |
+| Client/business orientation | High | Starts from what the team needs to work every day; former SME consultant |
+| Autonomy | High | Designed several modules solo; one of two people with AWS production access |
+| Collaboration | Medium-High | Co-develops modules and defines shared data models with the team |
 
 ## Strongest Behaviors
-- **[BEHAVIOR_1]:** [DESCRIPTION]
-- **[BEHAVIOR_2]:** [DESCRIPTION]
-- **[BEHAVIOR_3]:** [DESCRIPTION]
+- **End-to-end delivery:** requirements, data model, development, deployment, maintenance.
+- **Bridging business and code:** "understands both the code and the conversation with the client."
+- **Reliability under real use:** stabilisation after go-live, incident fixes, production administration.
 
 ## How You Work Best
-- [ENVIRONMENT_PREFERENCE_1]
-- [ENVIRONMENT_PREFERENCE_2]
-- [ENVIRONMENT_PREFERENCE_3]
+- Building tools a team actually uses every day.
+- Direct contact with the business people who use the system.
+- Roles with real ownership of modules and production responsibility.
 
 ## Growth Areas (frame positively in applications)
-- **[AREA_1]:** [HOW_TO_FRAME_IT_POSITIVELY]
-- **[AREA_2]:** [HOW_TO_FRAME_IT_POSITIVELY]
+- **Seniority:** Junior II title with ~1y9m at one company. Frame via scope: solo-designed modules, 230+ commits, full migration.
+- **English:** self-rated Elementary. Prefer Spanish-language roles; do not claim more.
 
 ## Mapping to Job Posting Language
 
 When a job posting mentions these keywords, it's a **strong behavioral fit**:
-- [KEYWORD_OR_PHRASE_THAT_MATCHES_YOUR_STYLE]
-- [ANOTHER_KEYWORD]
+- "módulos a medida", "desarrollo desde cero", "todo el ciclo de desarrollo", "contacto directo con el cliente", "implantación ERP", "autonomía"
 
 When a job posting mentions these, flag as **potential friction** (not deal-breaker):
-- [KEYWORD_OR_PHRASE_THAT_MIGHT_CLASH]
-- [ANOTHER_KEYWORD]
+- "inglés fluido/avanzado", "soporte de nivel 1 únicamente", "mantenimiento sin desarrollo", "guardias"
 
 ## Management Style Preferences
-- [WHAT_MANAGEMENT_STYLE_WORKS_FOR_YOU]
-- [WHAT_DOESN'T_WORK]
+- *[Not provided - ask the user]* Inferred only: responsibility and trust over close supervision.
 
 ## Using This in Applications
-- **Cover letters:** [HOW_TO_WEAVE_IN_BEHAVIORAL_STRENGTHS]
-- **CV:** [WHAT_TO_EMPHASIZE]
-- **Interviews:** [WHAT_STAR_EXAMPLES_TO_USE]
-- **Don't overstate:** [WHAT_NOT_TO_CLAIM]
+- **Cover letters:** lead with a concrete delivered result (ERP replacing ActiveCampaign, 25 users) and the end-to-end ownership.
+- **CV:** emphasise the migration numbers (7,000 / 10,000 / 1,200), solo modules, AWS production responsibility.
+- **Interviews:** use the STAR stubs in `07-interview-prep.md`.
+- **Don't overstate:** English level, seniority, team lead experience (none stated), "AWS expert" (he is one of two administrators of one environment).

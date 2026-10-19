@@ -111,3 +111,46 @@ When the user asks for interview practice:
 5. End with a tough question or curveball
 6. After each answer, give brief feedback: what worked, what to sharpen
 7. Suggest which STAR example would work best for each question
+
+
+## STAR Candidates (Complete Manually)
+
+### Migración completa de ActiveCampaign a Odoo
+**Source:** LinkedIn - Orbalia, Junior I
+**What happened:** Scripts en Python conectaron la API REST de ActiveCampaign con la XML-RPC de Odoo para migrar 7.000+ expedientes, 10.000 contactos y 1.200 empresas sin perder relaciones; producción en julio de 2026.
+**Why it matters:** "Cuéntame un proyecto complejo", datos/integraciones, gestión de riesgo.
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action:
+- Result:
+
+### Módulo de Expedientes de subvenciones (núcleo del ERP)
+**Source:** LinkedIn - Orbalia, Junior I
+**What happened:** Primera versión del módulo base que sustituyó a ActiveCampaign; 230+ commits; usado por 25 personas.
+**Why it matters:** Construir desde cero, ownership, trabajo con negocio.
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action:
+- Result:
+
+### Módulos diseñados en solitario (Proyectos IT, Ley de Transparencia, cuenta contable automática)
+**Source:** LinkedIn - Orbalia, Junior II
+**What happened:** Diseñó y desarrolló solo el módulo de Proyectos IT, la detección automática de clientes sujetos a la Ley de Transparencia de Canarias y la creación automática de la cuenta contable de cada cliente.
+**Why it matters:** Autonomía, requisitos ambiguos, iniciativa.
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action:
+- Result:
+
+### Administración de AWS en producción
+**Source:** LinkedIn - Orbalia
+**What happened:** Una de las dos personas con acceso al entorno AWS donde corre el ERP: despliegues, actualizaciones, disponibilidad.
+**Why it matters:** Responsabilidad en producción, incidentes, fiabilidad.
+**S/T/A/R stub:**
+- Situation:
+- Task:
+- Action:
+- Result:

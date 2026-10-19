@@ -1,10 +1,10 @@
-# Job Application Assistant for [YOUR_NAME]
+# Job Application Assistant for Pablo Santana Susilla
 
 <!-- SETUP: This file is populated by running /setup -->
 <!-- After running /setup, all [PLACEHOLDER] tokens will be replaced with your actual information -->
 
 ## Role
-This repo is a job application workspace. Claude acts as a career advisor and application assistant for [YOUR_NAME], helping with:
+This repo is a job application workspace. Claude acts as a career advisor and application assistant for Pablo Santana Susilla, helping with:
 1. **Job fit evaluation** - Assess job postings against your profile (skills, experience, behavioral traits)
 2. **CV tailoring** - Adapt existing CV templates (LaTeX/moderncv) to target specific roles
 3. **Cover letter writing** - Draft targeted cover letters using existing templates (LaTeX)
@@ -13,79 +13,70 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 
 ## Candidate Profile
 
-<!-- This section is auto-populated by /setup. You can also fill it in manually. -->
-
 ### Identity
-- **Name:** [YOUR_NAME]
-- **Location:** [YOUR_CITY], [YOUR_COUNTRY] ([YOUR_COMMUTE_CONSTRAINTS])
+- **Name:** Pablo Santana Susilla
+- **Location:** Las Palmas de Gran Canaria, Canarias, España (open to all of Spain, on-site or remote)
 - **Languages:**
   | Language | Level |
   |----------|-------|
-  | [LANGUAGE] | [LEVEL] |
-  <!-- Every language you work in professionally, with your level (CEFR, "native," "professional
-  working proficiency," whatever your CV/LinkedIn use - no need to force it into one scale). An
-  undeclared language is a hard deal-breaker if a posting requires it; a declared language at a
-  lower level than a posting wants is flagged for your own judgment, not auto-rejected. See
-  04-job-evaluation.md's Language Gate. -->
-- **CV language:** [YOUR_CV_LANGUAGE] <!-- English unless your market expects otherwise; /setup asks -->
+  | Spanish | Native |
+  | English | Elementary |
+- **CV language:** Español
 
-- **Status:** [YOUR_EMPLOYMENT_STATUS]
-- **LinkedIn headline:** "[YOUR_LINKEDIN_HEADLINE]"
+- **Status:** Employed at Orbalia (IT Consultant - Odoo Developer, Junior II); exploring new opportunities
+- **LinkedIn headline:** "Desarrollador Odoo · Python · PostgreSQL · QWeb | Construyo módulos a medida desde cero, en producción | AWS | Consultor IT en Orbalia"
 
 ### Education
-<!-- List your degrees, most recent first -->
-- **[DEGREE_LEVEL] in [FIELD]** ([YEAR_START]-[YEAR_END]) - [INSTITUTION]
-  - Thesis: "[THESIS_TITLE]"
-  - Topics: [KEY_TOPICS]
+- **Grado en Ingeniería Informática** (2018-2024) - Universidad de Las Palmas de Gran Canaria (ULPGC)
+- **Bachelor of Technology (BTech), Computer Engineering** (Sep 2021-Jun 2022) - Vilnius University (one year of studies abroad)
 
 ### Professional Experience
-<!-- List your roles, most recent first -->
-- **[JOB_TITLE]** ([START_DATE] - [END_DATE]) - **[COMPANY]** ([LOCATION])
-  - [KEY_RESPONSIBILITY_1]
-  - [KEY_RESPONSIBILITY_2]
-  - [KEY_ACHIEVEMENT]
+- **IT Consultant - Odoo Developer (Junior II)** (Aug 2026 - Present) - **Orbalia** (Las Palmas de Gran Canaria)
+  - One of the main developers of the Odoo ERP the whole company (25 people) runs on
+  - Designed and developed solo: IT Projects module, automatic detection of clients under the Canary Islands Transparency Law, automatic creation of each client's accounting account
+  - Co-developed the Financiación and Deducciones fiscales modules; administers the AWS infrastructure (one of two people with access)
+- **IT Consultant - Odoo Developer (Junior I)** (Aug 2025 - Jul 2026) - **Orbalia**
+  - First version of the Expedientes de subvenciones module, the core of the ERP that replaced ActiveCampaign (230+ commits)
+  - Designed and executed the ActiveCampaign to Odoo migration (Python, REST + XML-RPC): 7,000+ case files, 10,000 contacts, 1,200 companies
+- **IT Consultant in training** (Feb 2025 - Jul 2025) - **Orbalia** - Kit Consulting programme advising SMEs on digital solutions
+- **Web Developer** (Jan 2024 - Apr 2024) - **Tca-tik** - Laravel and JavaScript
 
 ### Technical Skills
-- **Primary:** [YOUR_PRIMARY_SKILLS]
-- **Secondary:** [YOUR_SECONDARY_SKILLS]
-- **Domain:** [YOUR_DOMAIN_EXPERTISE]
-- **Software:** [YOUR_TOOLS_AND_SOFTWARE]
+- **Primary:** Odoo (ORM, inheritance, computed fields, XML views, QWeb reports, security rules), Python, PostgreSQL
+- **Secondary:** REST API, XML-RPC, data migration, Linux, Git, AWS, JavaScript, Laravel
+- **Domain:** ERP implementation, grant management, regulatory compliance, accounting automation, IT consulting for SMEs
+- **Software:** Odoo, PostgreSQL, AWS, Git, Linux, Cisco networking (CCNAv7)
 
 ### Certifications
-<!-- List relevant certifications with dates -->
-- **[CERTIFICATION_NAME]** - [HOURS]h - completed [DATE]
+- **Data Analysis Using Python**, **Python for Data Science**
+- **CCNAv7:** Introduction to Networks; Switching, Routing, and Wireless Essentials; Enterprise Networking, Security, and Automation
 
 ### Publications
-<!-- List peer-reviewed publications, if any -->
-- [AUTHOR_LIST] ([YEAR]). [TITLE]. [JOURNAL].
+- None
 
 ### Awards
-<!-- List relevant awards, hackathons, competitions -->
-- [AWARD_NAME] - [EVENT] ([YEAR])
+- None
 
 ### Behavioral Profile
-<!-- Your behavioral assessment results (PI, DISC, Myers-Briggs, or self-assessment) -->
-- **[TRAIT_1]** - [DESCRIPTION]
-- **[TRAIT_2]** - [DESCRIPTION]
-- **Strengths:** [YOUR_STRENGTHS]
-- **Growth areas:** [YOUR_GROWTH_AREAS]
-- **Thrives in:** [YOUR_IDEAL_ENVIRONMENT]
+*[Inferred from LinkedIn - review before relying on this]*
+- **End-to-end ownership** - requirements, data model, development, deployment and maintenance in production
+- **Business-facing** - former SME consultant; bridges the client conversation and the code
+- **Strengths:** building tools a team uses daily, autonomy, reliability in production
+- **Growth areas:** seniority (Junior II), English (Elementary)
+- **Thrives in:** roles with ownership of modules and direct contact with the people who use them
 
 ### What Excites You
-<!-- What motivates you professionally -->
-- [PASSION_1]
-- [PASSION_2]
+- Building management software that a team uses every day
+- Designing data models and turning business requirements into working modules
 
 ### Target Sectors
-<!-- Industries and companies you're targeting -->
-- [SECTOR_1]: [EXAMPLE_COMPANIES]
-- [SECTOR_2]: [EXAMPLE_COMPANIES]
+- Odoo partners / ERP implementers: Spanish Odoo integrators and consultancies
+- IT consulting: digital-transformation and software consultancies for SMEs
+- Companies running Odoo in-house (internal Odoo developer roles)
 
 ### Deal-breakers
-<!-- Hard constraints on job search. Language requirements are handled separately and
-automatically from your Languages table above - don't duplicate them here. -->
-- [DEALBREAKER_1]
-- [DEALBREAKER_2]
+- Salary below 26,000 EUR gross per year
+- Postings that require working English above the declared level are flagged (not auto-rejected)
 
 ## Repo Structure
 - `cv/` - LaTeX CV variants (moderncv template, banking style)
