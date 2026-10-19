@@ -1,6 +1,9 @@
 {
   "permissions": {
     "allow": [
+      "Bash(git commit --amend:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
       "Skill(job-application-assistant)",
       "Bash(bun run .agents/skills/jobbank-search/cli/src/cli.ts:*)",
       "Bash(bun run .agents/skills/jobdanmark-search/cli/src/cli.ts:*)",
