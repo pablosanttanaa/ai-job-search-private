@@ -1,0 +1,17 @@
+# Bloque que se añade a /etc/caddy/Caddyfile en el VPS (no sustituye al existente).
+# El hash se genera en el VPS con:  caddy hash-password --plaintext '<contraseña>'
+# Caddy 2.6 usa la directiva "basicauth" (desde 2.8 se llama "basic_auth").
+empleo.51-170-38-230.sslip.io {
+	encode gzip
+	basicauth {
+		pablo <HASH_BCRYPT>
+	}
+	reverse_proxy 127.0.0.1:8095
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy no-referrer
+		X-Robots-Tag "noindex, nofollow"
+	}
+}

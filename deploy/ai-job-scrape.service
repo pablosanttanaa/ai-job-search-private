@@ -1,0 +1,13 @@
+[Unit]
+Description=Búsqueda diaria de ofertas de empleo (ai-job-search)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubuntu
+WorkingDirectory=/opt/ai-job-search
+Environment=PYTHONIOENCODING=utf-8
+Environment=PATH=/home/ubuntu/.bun/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 tools/daily_scrape.py --trigger timer
+TimeoutStartSec=30min

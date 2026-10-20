@@ -119,3 +119,13 @@ company_research/*.json
 
 # Brainstorm mockups (superpowers visual companion) - never ship
 .superpowers/
+
+# SSH keys / secrets - never commit
+*.key
+*.pem
+
+# Dashboard / daily scrape runtime state
+**/job_scraper/runs.json
+**/job_scraper/scrape.lock
+**/job_scraper/last_run.log
+**/job_scraper/settings.json

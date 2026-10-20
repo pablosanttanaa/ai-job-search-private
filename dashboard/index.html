@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ofertas de empleo</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --surface-2: #f0efec;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --series-1: #2a78d6;
+  --fit-high: #184f95;
+  --fit-medium: #3987e5;
+  --fit-low: #86b6ef;
+  --warning: #fab219;
+  --critical: #d03b3b;
+  --good: #0ca30c;
+  --accent: #2a78d6;
+  --accent-ink: #ffffff;
+  --new: #0b7f35;
+  --new-bg: rgba(12,163,12,0.07);
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface-1: #1a1a19;
+    --surface-2: #262624;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --axis: #383835;
+    --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5;
+    --fit-high: #9ec5f4;
+    --fit-medium: #5598e7;
+    --fit-low: #1c5cab;
+    --accent: #3987e5;
+    --accent-ink: #0b0b0b;
+    --new: #4cd07d;
+    --new-bg: rgba(76,208,125,0.09);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #262624;
+  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --series-1: #3987e5; --fit-high: #9ec5f4; --fit-medium: #5598e7; --fit-low: #1c5cab;
+  --accent: #3987e5; --accent-ink: #0b0b0b;
+  --new: #4cd07d; --new-bg: rgba(76,208,125,0.09);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--page); color: var(--text-primary);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px 48px; }
+header { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+h1 { font-size: 24px; margin: 0 0 4px; font-weight: 650; }
+.sub { color: var(--text-secondary); margin: 0; }
+.run-box { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.run-note { color: var(--text-secondary); font-size: 13px; text-align: right; }
+button.primary {
+  background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px;
+  padding: 10px 18px; font: inherit; font-weight: 600; cursor: pointer; min-height: 40px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+button.primary:disabled { opacity: .6; cursor: progress; }
+button.secondary {
+  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 14px; font: inherit; font-weight: 600; cursor: pointer; min-height: 40px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+button.secondary:hover { background: var(--surface-2); }
+.spin { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: s 0.8s linear infinite; display: none; }
+button.busy .spin { display: inline-block; }
+@keyframes s { to { transform: rotate(360deg); } }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.filters input[type=search], .filters select {
+  font: inherit; color: var(--text-primary); background: var(--surface-1);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; min-height: 36px;
+}
+.filters input[type=search] { flex: 1 1 220px; min-width: 0; }
+.chip {
+  font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface-1);
+  color: var(--text-secondary); border-radius: 999px; padding: 6px 12px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; min-height: 36px;
+}
+.chip[aria-pressed="true"] { color: var(--text-primary); border-color: var(--text-secondary); font-weight: 600; }
+.swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--new); flex: none; }
+.chip .n { font-variant-numeric: tabular-nums; color: var(--text-muted); font-weight: 400; }
+.prefs { color: var(--text-muted); font-size: 12.5px; margin: -6px 0 16px; }
+.prefs button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
+.kpi .label { color: var(--text-secondary); font-size: 13px; }
+.kpi .value { font-size: 28px; font-weight: 650; margin-top: 2px; }
+.kpi.hero .value { font-size: 48px; line-height: 1.05; }
+.kpi .hint { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+.kpi.clickable { cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; }
+.kpi.clickable:hover, .kpi.clickable[aria-pressed="true"] { border-color: var(--new); }
+.kpi.new-kpi .value { color: var(--new); }
+
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 400px) { .charts { grid-template-columns: 1fr; } }
+.card h2 { font-size: 15px; margin: 0 0 2px; font-weight: 600; }
+.card .desc { color: var(--text-secondary); font-size: 12.5px; margin: 0 0 12px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+.hbars { display: grid; grid-template-columns: minmax(80px, max-content) 1fr; gap: 6px 10px; align-items: center; }
+.hbars .lab { color: var(--text-secondary); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
+.hbars .track { display: flex; align-items: center; gap: 8px; min-width: 0; height: 26px; cursor: default; }
+.hbars .bar { height: 16px; border-radius: 0 4px 4px 0; min-width: 2px; }
+.hbars .val { font-size: 12.5px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.empty { color: var(--text-muted); font-size: 13px; padding: 12px 0; }
+
+svg text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--text-muted); }
+
+.tbl-card { padding: 0; overflow: hidden; }
+.tbl-head { padding: 16px 16px 8px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+.tbl-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--grid); vertical-align: top; }
+th { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; white-space: nowrap; user-select: none; }
+th[aria-sort] { color: var(--text-primary); }
+tbody tr.row { cursor: pointer; }
+tbody tr.row:hover { background: var(--surface-2); }
+tbody tr.row.is-new { background: var(--new-bg); }
+tbody tr.row.is-new:hover { background: var(--surface-2); }
+tbody tr.row.is-new td:first-child { box-shadow: inset 3px 0 0 var(--new); }
+.new-badge { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--new); border: 1px solid currentColor; border-radius: 4px; padding: 0 5px; margin-right: 6px; vertical-align: 1px; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+td:nth-child(2) { min-width: 230px; }
+td:nth-child(3) { min-width: 150px; }
+.meter { display: flex; align-items: center; gap: 8px; }
+.meter .m { width: 56px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.meter .m i { display: block; height: 100%; border-radius: 3px; }
+.title { font-weight: 600; }
+.company { color: var(--text-secondary); font-size: 13px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; white-space: nowrap; }
+.flags { display: flex; flex-wrap: wrap; gap: 4px; }
+.flag { font-size: 11.5px; border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; color: var(--text-secondary); white-space: nowrap; }
+.flag.warn { border-color: var(--warning); }
+.flag.bad { border-color: var(--critical); }
+.flag.good { border-color: var(--good); }
+a { color: var(--accent); }
+tr.detail td { background: var(--surface-2); color: var(--text-secondary); font-size: 13px; }
+tr.detail ul { margin: 6px 0 0; padding-left: 18px; }
+.status { font-size: 12px; color: var(--text-muted); }
+
+.runs { list-style: none; padding: 0; margin: 0; }
+.runs li { padding: 8px 0; border-top: 1px solid var(--grid); display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.runs li:first-child { border-top: 0; }
+.runs .when { min-width: 150px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.runs .err { color: var(--text-muted); }
+.runs details { flex-basis: 100%; color: var(--text-muted); font-size: 12px; }
+
+#tip {
+  position: fixed; pointer-events: none; z-index: 10; background: var(--surface-1); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; max-width: 260px;
+}
+dialog {
+  border: 1px solid var(--border); border-radius: 14px; background: var(--surface-1); color: var(--text-primary);
+  padding: 0; width: min(540px, calc(100% - 32px)); max-height: calc(100% - 32px); box-shadow: 0 12px 40px rgba(0,0,0,.25);
+}
+dialog::backdrop { background: rgba(0,0,0,.45); }
+.dlg-head { padding: 20px 20px 4px; }
+.dlg-head h2 { font-size: 18px; margin: 0 0 4px; font-weight: 650; }
+.dlg-body { padding: 12px 20px 4px; }
+.dlg-foot { padding: 12px 20px 20px; display: flex; justify-content: flex-end; gap: 8px; }
+.field, dialog fieldset { margin: 0 0 18px; }
+dialog fieldset { border: 0; padding: 0; }
+.field .lab, dialog legend { display: block; font-weight: 600; margin-bottom: 6px; padding: 0; }
+.field input[type=text], .field input[type=number] {
+  width: 100%; font: inherit; color: var(--text-primary); background: var(--page);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; min-height: 38px;
+}
+.help { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; cursor: pointer; min-height: 38px; }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--surface-2); }
+.opt input { margin: 0; accent-color: var(--accent); }
+.dlg-error { color: var(--critical); font-size: 13px; margin: 0; min-height: 1.2em; }
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--page); padding: 10px 16px; border-radius: 8px; font-size: 13px; display: none; z-index: 20; max-width: calc(100% - 32px); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Ofertas de empleo</h1>
+      <p class="sub" id="sub">Cargando…</p>
+    </div>
+    <div class="run-box">
+      <div class="run-note" id="next"></div>
+      <button class="secondary" id="open-settings" aria-haspopup="dialog">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h3M9 12h5"/><circle cx="11" cy="4" r="2"/><circle cx="7" cy="12" r="2"/></svg>
+        Ajustes
+      </button>
+      <button class="primary" id="run"><span class="spin"></span><span id="run-label">Buscar ahora</span></button>
+    </div>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filtros">
+    <input type="search" id="q" placeholder="Buscar puesto, empresa o ubicación…" aria-label="Buscar">
+    <button class="chip" id="only-new" aria-pressed="false"><span class="dot"></span>Solo nuevas <span class="n" id="new-n"></span></button>
+    <button class="chip" id="match-prefs" aria-pressed="true">Cumplen mis ajustes</button>
+    <button class="chip" data-fit="high" aria-pressed="true"><span class="swatch" style="background:var(--fit-high)"></span>Alto</button>
+    <button class="chip" data-fit="medium" aria-pressed="true"><span class="swatch" style="background:var(--fit-medium)"></span>Medio</button>
+    <button class="chip" data-fit="low" aria-pressed="true"><span class="swatch" style="background:var(--fit-low)"></span>Bajo</button>
+    <select id="state" aria-label="Estado">
+      <option value="open">Pendientes</option>
+      <option value="all">Todas</option>
+      <option value="closed">Descartadas / caducadas</option>
+    </select>
+    <select id="portal" aria-label="Portal"><option value="">Todos los portales</option></select>
+  </div>
+  <p class="prefs" id="prefs"></p>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="charts">
+    <div class="card">
+      <h2>Ofertas por encaje</h2>
+      <p class="desc">Cuántas ofertas filtradas hay en cada nivel de encaje con tu CV.</p>
+      <div id="c-fit"></div>
+    </div>
+    <div class="card">
+      <h2>Publicadas por día</h2>
+      <p class="desc">Fecha de publicación de la oferta, últimos 21 días.</p>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--fit-high)"></i>Alto</span>
+        <span><i class="swatch" style="background:var(--fit-medium)"></i>Medio</span>
+        <span><i class="swatch" style="background:var(--fit-low)"></i>Bajo</span>
+      </div>
+      <div id="c-days"></div>
+    </div>
+    <div class="card">
+      <h2>Dónde están</h2>
+      <p class="desc">Ofertas por comunidad autónoma (las 8 con más).</p>
+      <div id="c-region"></div>
+    </div>
+    <div class="card">
+      <h2>Qué te frena</h2>
+      <p class="desc">Alertas más repetidas en las ofertas filtradas.</p>
+      <div id="c-flags"></div>
+    </div>
+  </section>
+
+  <section class="card tbl-card">
+    <div class="tbl-head">
+      <div><h2>Ofertas</h2><p class="desc" id="count" style="margin:0"></p></div>
+      <span class="status">Pulsa una fila para ver el detalle</span>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr>
+          <th data-sort="score" aria-sort="descending">Puntuación</th>
+          <th data-sort="title">Puesto</th>
+          <th data-sort="region">Ubicación</th>
+          <th data-sort="posted">Publicada</th>
+          <th data-sort="fit">Encaje</th>
+          <th>Alertas</th>
+          <th>Oferta</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:16px">
+    <h2>Últimas búsquedas</h2>
+    <p class="desc">Automáticas cada día a las 13:00 (hora de Madrid) y las que lances con el botón.</p>
+    <ul class="runs" id="runs"></ul>
+  </section>
+</div>
+<dialog id="settings" aria-labelledby="dlg-title">
+  <form id="settings-form">
+    <div class="dlg-head">
+      <h2 id="dlg-title">Ajustes de búsqueda</h2>
+      <p class="desc" style="margin:0">Filtran ya la lista de ofertas y, desde la próxima búsqueda, también cuentan en la puntuación.</p>
+    </div>
+    <div class="dlg-body">
+      <div class="field">
+        <label class="lab" for="f-salary">Salario mínimo (bruto anual, €)</label>
+        <input type="number" id="f-salary" min="0" max="300000" step="500" required inputmode="numeric">
+        <div class="help">Las ofertas que indican un salario por debajo se descartan.</div>
+      </div>
+      <div class="field">
+        <label class="lab" for="f-loc">Ubicación</label>
+        <input type="text" id="f-loc" placeholder="Canarias, Las Palmas, Tenerife" autocomplete="off">
+        <div class="help">Separadas por comas. Las ofertas en estas zonas puntúan más; la primera se usa para la búsqueda local en LinkedIn.</div>
+      </div>
+      <fieldset>
+        <legend>Tipo de trabajo que aceptas</legend>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="mode" value="presencial"> Presencial</label>
+          <label class="opt"><input type="checkbox" name="mode" value="hibrido"> Semipresencial</label>
+          <label class="opt"><input type="checkbox" name="mode" value="remoto"> Teletrabajo</label>
+        </div>
+        <div class="help">Si una oferta no dice nada, cuenta como presencial.</div>
+      </fieldset>
+      <fieldset>
+        <legend>Dónde aceptas presencial o semipresencial</legend>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="scope" value="spain"> En toda España</label>
+          <label class="opt"><input type="radio" name="scope" value="local"> Solo en mi ubicación</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label class="lab" for="f-excl">Palabras que descartan un puesto</label>
+        <input type="text" id="f-excl" placeholder="prácticas, becario" autocomplete="off">
+        <div class="help">Separadas por comas. Se buscan en el título de la oferta.</div>
+      </div>
+      <div class="field">
+        <label class="opt"><input type="checkbox" id="f-eng"> Bajar la puntuación si piden inglés alto</label>
+      </div>
+      <p class="dlg-error" id="dlg-error" role="alert"></p>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="secondary" id="dlg-cancel">Cancelar</button>
+      <button type="submit" class="primary" id="dlg-save">Guardar</button>
+    </div>
+  </form>
+</dialog>
+<div id="tip" role="tooltip"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+const FIT = { high: "Alto", medium: "Medio", low: "Bajo" };
+const FIT_ORDER = ["high", "medium", "low"];
+const FIT_VAR = { high: "var(--fit-high)", medium: "var(--fit-medium)", low: "var(--fit-low)" };
+const OPEN = new Set(["new", "ranked"]);
+const STATUS = { new: "Sin evaluar", ranked: "Evaluada", skipped: "Descartada", expired: "Caducada", unreachable: "No disponible" };
+const REGIONS = [
+  [/canari|las palmas|tenerife|gran canaria/i, "Canarias"],
+  [/catalon|catalu|barcelona|girona|lleida|tarragona|vall[eè]s|sant |hospitalet/i, "Cataluña"],
+  [/valencia|castell|alicante|elche|sagunto|raspeig/i, "C. Valenciana"],
+  [/madrid|alcobendas|getafe|pozuelo|legan|alcal/i, "Madrid"],
+  [/andaluc|m[aá]laga|sevilla|granada|c[aá]diz|c[oó]rdoba|almer/i, "Andalucía"],
+  [/murcia/i, "Murcia"],
+  [/basque|vasco|bilbao|irun|ir[uú]n|getxo|vizcaya|donostia/i, "País Vasco"],
+  [/castilla and leon|castilla y le|le[oó]n|burgos|valladolid|es413/i, "Castilla y León"],
+  [/galicia|vigo|coru|santiago de compostela/i, "Galicia"],
+  [/arag|zaragoza/i, "Aragón"],
+  [/navarra|pamplona/i, "Navarra"],
+  [/asturias|oviedo|gij/i, "Asturias"],
+  [/baleares|mallorca|ibiza/i, "Baleares"],
+  [/remot/i, "Remoto"],
+  [/spain|espa[nñ]a|^es$/i, "España (sin concretar)"],
+];
+const MODE_LABEL = { presencial: "Presencial", hibrido: "Semipresencial", remoto: "Teletrabajo" };
+let DATA = { jobs: [], runs: [], running: false, settings: null };
+let sort = { key: "score", dir: -1 };
+let onlyNew = false;
+let matchPrefs = true;
+let openRow = null;
+let pollTimer = null;
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const safeUrl = (u) => /^https?:\/\//i.test(u || "") ? u : null;
+function region(loc) {
+  if (!loc) return "Sin ubicación";
+  for (const [re, name] of REGIONS) if (re.test(loc)) return name;
+  return "Fuera de España";
+}
+const scoreOf = (j) => j.rank_score ?? j.auto_score ?? null;
+const flagsOf = (j) => j.auto_flags || [];
+const fmtDate = (d) => d ? new Date(d + "T12:00:00").toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) : "—";
+const fmtWhen = (iso) => iso ? new Date(iso).toLocaleString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "—";
+function flagClass(f) {
+  if (/⚠|fuera de|modalidad no deseada|excluida/.test(f)) return "flag bad";
+  if (/pide|senior|baja de|< \d/.test(f)) return "flag warn";
+  if (/remoto|canarias|en tu zona|salario \d/i.test(f)) return "flag good";
+  return "flag";
+}
+const fold = (s) => String(s ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+const fmtEur = (n) => n.toLocaleString("es-ES") + " €";
+
+// ---------- new since the previous run ----------
+// Each run stamps its postings with found_in_run = its "started"; the latest
+// successful run's postings are the new ones.
+function lastRun() {
+  for (let i = DATA.runs.length - 1; i >= 0; i--) if (DATA.runs[i].ok) return DATA.runs[i];
+  return null;
+}
+function isNew(j) {
+  const r = lastRun();
+  return !!r && j.found_in_run === r.started;
+}
+
+// ---------- settings check (also covers postings scored before a change) ----------
+function modeOf(j) {
+  if (j.work_mode) return j.work_mode;
+  const f = flagsOf(j);
+  return f.includes("remoto") ? "remoto" : f.includes("híbrido") ? "hibrido" : "presencial";
+}
+function salaryMaxOf(j) {
+  if (j.salary_max != null) return j.salary_max;
+  for (const f of flagsOf(j)) { const m = /^salario [\d.]+–([\d.]+)/.exec(f); if (m) return +m[1].replace(/\./g, ""); }
+  return null;
+}
+function prefIssues(j) {
+  const s = DATA.settings;
+  if (!s) return [];
+  const out = [];
+  const mode = modeOf(j);
+  const max = salaryMaxOf(j);
+  const local = s.locations.some((l) => fold(`${j.location || ""} ${j.title || ""}`).includes(fold(l)));
+  const excluded = s.exclude_keywords.find((k) => fold(j.title).includes(fold(k)));
+  if (!s.work_modes.includes(mode)) out.push(`modalidad no deseada (${MODE_LABEL[mode].toLowerCase()})`);
+  else if (s.scope === "local" && mode !== "remoto" && !local) out.push("fuera de tu zona");
+  if (max != null && max < s.min_salary) out.push(`salario < ${fmtEur(s.min_salary)}`);
+  if (excluded) out.push(`excluida por «${excluded}»`);
+  return out;
+}
+
+function filtered() {
+  const q = $("#q").value.trim().toLowerCase();
+  const fits = new Set([...document.querySelectorAll(".chip[data-fit]")].filter((b) => b.getAttribute("aria-pressed") === "true").map((b) => b.dataset.fit));
+  const st = $("#state").value;
+  const portal = $("#portal").value;
+  return DATA.jobs.filter((j) => {
+    if (!fits.has(j.fit)) return false;
+    const open = OPEN.has(j.status);
+    if (st === "open" && !open) return false;
+    if (st === "closed" && open) return false;
+    if (portal && j.portal !== portal) return false;
+    if (q && ![j.title, j.company, j.location, region(j.location)].join(" ").toLowerCase().includes(q)) return false;
+    if (onlyNew && !isNew(j)) return false;
+    if (matchPrefs && prefIssues(j).length) return false;
+    return true;
+  });
+}
+
+// ---------- tooltip ----------
+const tip = $("#tip");
+function bindTip(el, html) {
+  el.addEventListener("mousemove", (e) => {
+    tip.innerHTML = html; tip.style.display = "block";
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = e.clientX + 14, y = e.clientY + 14;
+    if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+    if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  });
+  el.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+}
+
+// ---------- charts ----------
+function hbars(target, rows, colorFn) {
+  const el = $(target);
+  el.innerHTML = "";
+  if (!rows.length || rows.every((r) => !r.value)) { el.innerHTML = '<div class="empty">Sin datos con estos filtros.</div>'; return; }
+  const max = Math.max(...rows.map((r) => r.value), 1);
+  const grid = document.createElement("div");
+  grid.className = "hbars";
+  for (const r of rows) {
+    const lab = document.createElement("div");
+    lab.className = "lab"; lab.textContent = r.label; lab.title = r.label;
+    const track = document.createElement("div");
+    track.className = "track";
+    track.innerHTML = `<div class="bar" style="width:calc(${(r.value / max) * 100}% - 34px);background:${colorFn(r)}"></div><span class="val">${r.value}</span>`;
+    bindTip(track, `<strong>${esc(r.label)}</strong><br>${r.value} oferta${r.value === 1 ? "" : "s"}${r.extra ? "<br>" + r.extra : ""}`);
+    grid.append(lab, track);
+  }
+  el.append(grid);
+}
+
+function dayColumns(target, jobs) {
+  const el = $(target);
+  const days = [];
+  const today = new Date(); today.setHours(12, 0, 0, 0);
+  for (let i = 20; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d.toISOString().slice(0, 10)); }
+  const counts = Object.fromEntries(days.map((d) => [d, { high: 0, medium: 0, low: 0 }]));
+  for (const j of jobs) if (j.posted_date && counts[j.posted_date]) counts[j.posted_date][j.fit]++;
+  const totals = days.map((d) => FIT_ORDER.reduce((s, f) => s + counts[d][f], 0));
+  const max = Math.max(...totals);
+  if (!max) { el.innerHTML = '<div class="empty">Sin ofertas con fecha en los últimos 21 días.</div>'; return; }
+  const step = max <= 5 ? 1 : max <= 10 ? 2 : Math.ceil(max / 5);
+  const top = Math.ceil(max / step) * step;
+  const W = 380, H = 190, L = 24, R = 4, T = 8, B = 22;
+  const pw = W - L - R, ph = H - T - B, slot = pw / days.length, bw = Math.min(16, slot - 4);
+  const y = (v) => T + ph - (v / top) * ph;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Ofertas publicadas por día y encaje">`;
+  for (let v = 0; v <= top; v += step) {
+    svg += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? "var(--grid)" : "var(--axis)"}" stroke-width="1"/>`;
+    svg += `<text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  }
+  days.forEach((d, i) => {
+    const x = L + i * slot + (slot - bw) / 2;
+    let base = 0;
+    const segs = FIT_ORDER.filter((f) => counts[d][f]);
+    segs.forEach((f, k) => {
+      const v = counts[d][f];
+      const y0 = y(base), y1 = y(base + v);
+      const gap = k > 0 ? 2 : 0;           // 2px surface gap between stacked segments
+      const hgt = Math.max(1, y0 - y1 - gap);
+      const yy = y1;
+      const isTop = k === segs.length - 1;
+      const r = isTop ? Math.min(4, hgt) : 0;
+      svg += r
+        ? `<path d="M${x},${yy + hgt} V${yy + r} Q${x},${yy} ${x + r},${yy} H${x + bw - r} Q${x + bw},${yy} ${x + bw},${yy + r} V${yy + hgt} Z" fill="${FIT_VAR[f]}"/>`
+        : `<rect x="${x}" y="${yy}" width="${bw}" height="${hgt}" fill="${FIT_VAR[f]}"/>`;
+      base += v;
+    });
+    const last = i === days.length - 1;
+    if (i % 4 === 0 || last) svg += `<text x="${last ? W - R : L + i * slot + slot / 2}" y="${H - 6}" text-anchor="${last ? "end" : "middle"}">${fmtDate(d)}</text>`;
+    svg += `<rect class="hit" data-day="${d}" x="${L + i * slot}" y="${T}" width="${slot}" height="${ph}" fill="transparent"/>`;
+  });
+  svg += "</svg>";
+  el.innerHTML = svg;
+  el.querySelectorAll("rect.hit").forEach((h) => {
+    const d = h.dataset.day, c = counts[d], t = FIT_ORDER.reduce((s, f) => s + c[f], 0);
+    bindTip(h, `<strong>${fmtDate(d)}</strong> · ${t} oferta${t === 1 ? "" : "s"}` +
+      FIT_ORDER.map((f) => `<br><span class="swatch" style="background:${FIT_VAR[f]}"></span> ${FIT[f]}: ${c[f]}`).join(""));
+  });
+}
+
+function renderCharts(jobs) {
+  hbars("#c-fit", FIT_ORDER.map((f) => ({ label: FIT[f], value: jobs.filter((j) => j.fit === f).length, fit: f })), (r) => FIT_VAR[r.fit]);
+  dayColumns("#c-days", jobs);
+  const byRegion = {};
+  for (const j of jobs) { const r = region(j.location); byRegion[r] = (byRegion[r] || 0) + 1; }
+  const regs = Object.entries(byRegion).sort((a, b) => b[1] - a[1]);
+  const topR = regs.slice(0, 8).map(([label, value]) => ({ label, value }));
+  const rest = regs.slice(8).reduce((s, [, v]) => s + v, 0);
+  if (rest) topR.push({ label: "Otras", value: rest });
+  hbars("#c-region", topR, () => "var(--series-1)");
+  const byFlag = {};
+  for (const j of jobs) for (const f of flagsOf(j)) {
+    const k = f.startsWith("pide") ? "Piden más años que los tuyos" : f.includes("inglés") ? "Inglés alto" : f.startsWith("⚠ exige") ? "Otro idioma obligatorio"
+      : f === "senior" ? "Puesto senior" : f === "salario no indicado" ? "Salario no indicado" : /baja de|< \d/.test(f) ? "Salario por debajo de tu mínimo"
+      : f === "fuera de España" ? "Fuera de España" : f.startsWith("modalidad no deseada") ? "Modalidad no deseada"
+      : f === "fuera de tu zona" ? "Fuera de tu zona" : null;
+    if (k) byFlag[k] = (byFlag[k] || 0) + 1;
+  }
+  hbars("#c-flags", Object.entries(byFlag).sort((a, b) => b[1] - a[1]).map(([label, value]) => ({ label, value })), () => "var(--series-1)");
+}
+
+// ---------- KPIs ----------
+function renderKpis(jobs) {
+  const open = DATA.jobs.filter((j) => OPEN.has(j.status) && !(matchPrefs && prefIssues(j).length));
+  const last = lastRun();
+  const fresh = open.filter(isNew);
+  const tiles = [
+    { cls: "hero", label: "Encaje alto pendientes", value: open.filter((j) => j.fit === "high").length, hint: "Para mirar primero" },
+    { cls: "new-kpi", id: "kpi-new", label: "Nuevas en la última búsqueda", value: last ? fresh.length : "—",
+      hint: last ? `${fresh.filter((j) => j.fit === "high").length} de encaje alto · ${fmtWhen(last.started)} · pulsa para ${onlyNew ? "ver todas" : "verlas"}` : "Aún no hay búsquedas" },
+    { label: "Pendientes", value: open.length, hint: `${open.filter((j) => j.fit === "medium").length} de encaje medio` },
+    { label: "Ofertas vistas", value: DATA.jobs.length, hint: `${jobs.length} con los filtros actuales` },
+  ];
+  $("#kpis").innerHTML = tiles.map((t) => {
+    const inner = `<div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}</div><div class="hint">${esc(t.hint)}</div>`;
+    return t.id
+      ? `<button type="button" class="card kpi clickable ${t.cls}" id="${t.id}" aria-pressed="${onlyNew}">${inner}</button>`
+      : `<div class="card kpi ${t.cls || ""}">${inner}</div>`;
+  }).join("");
+  $("#kpi-new").addEventListener("click", () => setOnlyNew(!onlyNew));
+}
+
+function renderPrefs() {
+  const s = DATA.settings;
+  if (!s) { $("#prefs").textContent = ""; return; }
+  const parts = [
+    `mínimo ${fmtEur(s.min_salary)}`,
+    s.work_modes.map((m) => MODE_LABEL[m].toLowerCase()).join(", "),
+    s.locations.length ? `${s.locations.join(", ")}${s.scope === "local" ? " (solo tu zona)" : ""}` : "sin ubicación",
+  ];
+  if (s.exclude_keywords.length) parts.push(`sin «${s.exclude_keywords.join("», «")}»`);
+  $("#prefs").innerHTML = `Tus ajustes: ${esc(parts.join(" · "))} · <button type="button" id="prefs-edit">Cambiar</button>`;
+  $("#prefs-edit").addEventListener("click", openSettings);
+}
+
+function setOnlyNew(v) {
+  onlyNew = v;
+  $("#only-new").setAttribute("aria-pressed", String(v));
+  render();
+}
+
+// ---------- table ----------
+function renderTable(jobs) {
+  const fitRank = { high: 0, medium: 1, low: 2 };
+  const val = {
+    score: (j) => scoreOf(j) ?? -1,
+    title: (j) => (j.title || "").toLowerCase(),
+    region: (j) => region(j.location),
+    posted: (j) => j.posted_date || "",
+    fit: (j) => -fitRank[j.fit],
+  }[sort.key];
+  const rows = [...jobs].sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * sort.dir);
+  const hidden = matchPrefs ? DATA.jobs.filter((j) => prefIssues(j).length).length : 0;
+  $("#count").textContent = `${rows.length} oferta${rows.length === 1 ? "" : "s"}` +
+    (hidden ? ` · ${hidden} oculta${hidden === 1 ? "" : "s"} porque no cumplen tus ajustes` : "");
+  const tb = $("#rows");
+  if (!rows.length) {
+    tb.innerHTML = `<tr><td colspan="7" class="empty">${onlyNew ? "La última búsqueda no trajo ofertas nuevas con estos filtros." : "No hay ofertas con estos filtros."}</td></tr>`;
+    return;
+  }
+  tb.innerHTML = rows.map((j) => {
+    const s = scoreOf(j), url = safeUrl(j.url), fresh = isNew(j);
+    const own = flagsOf(j).filter((f) => f !== "salario no indicado");
+    const extra = prefIssues(j).filter((f) => !own.includes(f) && !(f.startsWith("salario <") && own.some((o) => /< \d/.test(o))));
+    const flags = [...own, ...extra];
+    return `<tr class="row${fresh ? " is-new" : ""}" data-key="${esc(j.key)}">
+      <td class="num"><div class="meter"><div class="m"><i style="width:${s ?? 0}%;background:${FIT_VAR[j.fit]}"></i></div>${s ?? "—"}</div></td>
+      <td><div class="title">${fresh ? '<span class="new-badge" title="Encontrada en la última búsqueda">Nueva</span>' : ""}${esc(j.title)}</div><div class="company">${esc(j.company)}</div></td>
+      <td><div>${esc(region(j.location))}</div><div class="company">${esc(j.location || "")}</div></td>
+      <td class="num">${fmtDate(j.posted_date)}</td>
+      <td><span class="badge"><span class="swatch" style="background:${FIT_VAR[j.fit]}"></span>${FIT[j.fit] || "—"}</span><div class="status">${esc(STATUS[j.status] || j.status)}</div></td>
+      <td><div class="flags">${flags.map((f) => `<span class="${flagClass(f)}">${esc(f)}</span>`).join("")}</div></td>
+      <td>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir ↗</a>` : "—"}</td>
+    </tr>` + (openRow === j.key ? detailRow(j) : "");
+  }).join("");
+  tb.querySelectorAll("tr.row").forEach((tr) => tr.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return;
+    openRow = openRow === tr.dataset.key ? null : tr.dataset.key;
+    renderTable(jobs);
+  }));
+}
+function detailRow(j) {
+  const list = (title, items) => items && items.length ? `<p style="margin:10px 0 0"><strong>${title}</strong></p><ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
+  return `<tr class="detail"><td colspan="7">
+    ${j.rank_verdict ? `<p style="margin:0"><strong>Evaluación:</strong> ${esc(j.rank_verdict)} (${esc(j.rank_score)}/100, ${esc(j.rank_date || "")})</p>` : ""}
+    ${j.snippet ? `<p style="margin:6px 0 0">${esc(j.snippet)}${j.snippet.length >= 600 ? "…" : ""}</p>` : '<p style="margin:0">Sin extracto de la descripción.</p>'}
+    ${list("Puntos fuertes", j.strengths)}${list("Carencias", j.gaps)}
+    <p class="status" style="margin:10px 0 0">Modalidad: ${esc(MODE_LABEL[modeOf(j)])}${j.work_mode ? "" : " (estimada)"} · portal: ${esc(j.portal || "—")} · vista por primera vez: ${esc(j.found_in_run ? fmtWhen(j.found_in_run) : j.first_seen || "—")} · clave: ${esc(j.key)}</p>
+  </td></tr>`;
+}
+document.querySelectorAll("th[data-sort]").forEach((th) => th.addEventListener("click", () => {
+  const k = th.dataset.sort;
+  sort = { key: k, dir: sort.key === k ? -sort.dir : (k === "title" || k === "region" ? 1 : -1) };
+  document.querySelectorAll("th[data-sort]").forEach((t) => t.removeAttribute("aria-sort"));
+  th.setAttribute("aria-sort", sort.dir > 0 ? "ascending" : "descending");
+  renderTable(filtered());
+}));
+
+// ---------- runs ----------
+function renderRuns() {
+  const runs = [...DATA.runs].reverse();
+  const ref = lastRun();
+  $("#runs").innerHTML = runs.length ? runs.map((r) => `<li>
+      <span class="when">${fmtWhen(r.started)}${r === ref ? ' <span class="new-badge" title="Sus ofertas son las marcadas como nuevas">Nuevas</span>' : ""}</span>
+      <span>${r.trigger === "timer" ? "Automática" : "Manual"}</span>
+      <span>${r.ok ? `+${r.new} nuevas (${r.high} alto, ${r.medium} medio)` : "Falló"}</span>
+      ${r.errors && r.errors.length ? `<details><summary>${r.errors.length} aviso${r.errors.length === 1 ? "" : "s"}</summary>${r.errors.map(esc).join("<br>")}</details>` : ""}
+    </li>`).join("") : '<li class="empty">Todavía no hay búsquedas registradas. Pulsa «Buscar ahora».</li>';
+}
+
+function nextRunText() {
+  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", hour12: false });
+  const h = +fmt.format(new Date());
+  return `Próxima búsqueda automática: ${h < 13 ? "hoy" : "mañana"} a las 13:00`;
+}
+
+function render() {
+  const jobs = filtered();
+  renderKpis(jobs); renderPrefs(); renderCharts(jobs); renderTable(jobs); renderRuns();
+  const nNew = DATA.jobs.filter((j) => isNew(j) && OPEN.has(j.status) && !(matchPrefs && prefIssues(j).length)).length;
+  $("#new-n").textContent = lastRun() ? `(${nNew})` : "";
+  const last = DATA.runs[DATA.runs.length - 1];
+  $("#sub").textContent = last ? `Última búsqueda: ${fmtWhen(last.finished)}` : "Ofertas de LinkedIn y freehire puntuadas según tu CV";
+  $("#next").textContent = nextRunText();
+  const btn = $("#run");
+  btn.disabled = DATA.running; btn.classList.toggle("busy", DATA.running);
+  $("#run-label").textContent = DATA.running ? "Buscando…" : "Buscar ahora";
+}
+
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => (t.style.display = "none"), 5000); }
+
+async function load() {
+  const res = await fetch("/api/data", { cache: "no-store" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const wasRunning = DATA.running;
+  DATA = await res.json();
+  const portals = [...new Set(DATA.jobs.map((j) => j.portal).filter(Boolean))].sort();
+  const sel = $("#portal"), cur = sel.value;
+  sel.innerHTML = '<option value="">Todos los portales</option>' + portals.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join("");
+  sel.value = cur;
+  render();
+  if (wasRunning && !DATA.running) {
+    const r = DATA.runs[DATA.runs.length - 1];
+    toast(r && r.ok ? `Búsqueda terminada: ${r.new} ofertas nuevas` : "La búsqueda terminó con errores; mira «Últimas búsquedas»");
+  }
+  clearTimeout(pollTimer);
+  pollTimer = setTimeout(() => load().catch(() => {}), DATA.running ? 4000 : 60000);
+}
+
+$("#run").addEventListener("click", async () => {
+  const res = await fetch("/api/run", { method: "POST", headers: { "X-Requested-With": "job-dashboard" } });
+  if (res.status === 202) { toast("Búsqueda iniciada; tarda 2-4 minutos"); DATA.running = true; render(); }
+  else if (res.status === 409) toast("Ya hay una búsqueda en marcha");
+  else toast("No se pudo iniciar la búsqueda (HTTP " + res.status + ")");
+  clearTimeout(pollTimer); pollTimer = setTimeout(() => load().catch(() => {}), 3000);
+});
+$("#q").addEventListener("input", render);
+$("#state").addEventListener("change", render);
+$("#portal").addEventListener("change", render);
+document.querySelectorAll(".chip[data-fit]").forEach((b) => b.addEventListener("click", () => {
+  b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); render();
+}));
+$("#only-new").addEventListener("click", () => setOnlyNew(!onlyNew));
+$("#match-prefs").addEventListener("click", () => {
+  matchPrefs = !matchPrefs;
+  $("#match-prefs").setAttribute("aria-pressed", String(matchPrefs));
+  render();
+});
+
+// ---------- settings dialog ----------
+const dlg = $("#settings");
+function openSettings() {
+  const s = DATA.settings || {};
+  $("#f-salary").value = s.min_salary ?? 26000;
+  $("#f-loc").value = (s.locations || []).join(", ");
+  document.querySelectorAll("input[name=scope]").forEach((r) => { r.checked = r.value === (s.scope || "spain"); });
+  document.querySelectorAll("input[name=mode]").forEach((c) => { c.checked = (s.work_modes || []).includes(c.value); });
+  $("#f-excl").value = (s.exclude_keywords || []).join(", ");
+  $("#f-eng").checked = s.penalize_english !== false;
+  $("#dlg-error").textContent = "";
+  dlg.showModal();
+}
+$("#open-settings").addEventListener("click", openSettings);
+$("#dlg-cancel").addEventListener("click", () => dlg.close());
+$("#settings-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const err = $("#dlg-error");
+  const modes = [...document.querySelectorAll("input[name=mode]:checked")].map((c) => c.value);
+  if (!modes.length) { err.textContent = "Elige al menos un tipo de trabajo."; return; }
+  const body = {
+    min_salary: Number($("#f-salary").value),
+    locations: $("#f-loc").value,
+    scope: document.querySelector("input[name=scope]:checked")?.value || "spain",
+    work_modes: modes,
+    exclude_keywords: $("#f-excl").value,
+    penalize_english: $("#f-eng").checked,
+  };
+  const btn = $("#dlg-save");
+  btn.disabled = true; err.textContent = "";
+  try {
+    const res = await fetch("/api/settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Requested-With": "job-dashboard" },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) { err.textContent = data.error ? data.error[0].toUpperCase() + data.error.slice(1) + "." : `No se pudieron guardar (HTTP ${res.status}).`; return; }
+    DATA.settings = data;
+    dlg.close();
+    render();
+    toast("Ajustes guardados. La próxima búsqueda los usará también para puntuar.");
+  } catch (ex) {
+    err.textContent = "No se pudieron guardar: " + ex.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+load().catch((e) => { $("#sub").textContent = "No se pudieron cargar los datos: " + e.message; });
+</script>
+</body>
+</html>

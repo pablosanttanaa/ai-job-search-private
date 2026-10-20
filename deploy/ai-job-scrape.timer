@@ -1,0 +1,10 @@
+[Unit]
+Description=Lanza la búsqueda de ofertas todos los días a las 13:00 (hora de Madrid)
+
+[Timer]
+OnCalendar=*-*-* 13:00:00 Europe/Madrid
+Persistent=true
+Unit=ai-job-scrape.service
+
+[Install]
+WantedBy=timers.target
