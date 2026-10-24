@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T12:00:00Z",
+  "title": "Design System: Ofertas de empleo",
+  "extensions": {
+    "colorMeta": {
+      "band-yellow": {
+        "role": "primary",
+        "displayName": "Process Yellow",
+        "canonical": "#ffd200",
+        "dark": "#ffd200",
+        "tonalRamp": [
+          "#3d3100",
+          "#5f4d00",
+          "#866c00",
+          "#b08e00",
+          "#dcb300",
+          "#ffd200",
+          "#ffe46b",
+          "#fff4c2"
+        ]
+      },
+      "band-ink": {
+        "role": "primary",
+        "displayName": "Band Ink",
+        "canonical": "#16130f",
+        "dark": "#16130f",
+        "tonalRamp": [
+          "#0b0a08",
+          "#16130f",
+          "#2b2720",
+          "#433d33",
+          "#5e574b",
+          "#7d7567",
+          "#a39b8c",
+          "#cdc7bb"
+        ]
+      },
+      "link-blue": {
+        "role": "secondary",
+        "displayName": "Press Blue",
+        "canonical": "#1d4fd7",
+        "dark": "#93b1ff",
+        "tonalRamp": [
+          "#0b1d54",
+          "#122c80",
+          "#1a3dae",
+          "#1d4fd7",
+          "#4f75ea",
+          "#7f9cf5",
+          "#b0c3fb",
+          "#dde6fe"
+        ]
+      },
+      "vermilion": {
+        "role": "tertiary",
+        "displayName": "Vermilion",
+        "canonical": "#c8321e",
+        "dark": "#ff6b55",
+        "tonalRamp": [
+          "#4a0f07",
+          "#71180c",
+          "#9b2414",
+          "#c8321e",
+          "#e7533c",
+          "#ff6b55",
+          "#ffa596",
+          "#ffd9d2"
+        ]
+      },
+      "amber": {
+        "role": "tertiary",
+        "displayName": "Burnt Amber",
+        "canonical": "#8f5400",
+        "dark": "#f0b44c",
+        "tonalRamp": [
+          "#2e1a00",
+          "#4c2d00",
+          "#6c4000",
+          "#8f5400",
+          "#b8750f",
+          "#f0b44c",
+          "#f7d08f",
+          "#fcebcd"
+        ]
+      },
+      "ledger-green": {
+        "role": "tertiary",
+        "displayName": "Ledger Green",
+        "canonical": "#1f6b3a",
+        "dark": "#74d394",
+        "tonalRamp": [
+          "#08240f",
+          "#0f3d1d",
+          "#16542b",
+          "#1f6b3a",
+          "#2f9354",
+          "#74d394",
+          "#a8e5bc",
+          "#dbf5e3"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Newsprint",
+        "canonical": "#f4f3ef",
+        "dark": "#12110e",
+        "tonalRamp": [
+          "#12110e",
+          "#2a2823",
+          "#4a4740",
+          "#6e6a61",
+          "#959187",
+          "#bcb9b0",
+          "#e0ded8",
+          "#f4f3ef"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Newsprint Shade",
+        "canonical": "#eae8e1",
+        "dark": "#1b1915"
+      },
+      "sheet": {
+        "role": "neutral",
+        "displayName": "Sheet",
+        "canonical": "#ffffff",
+        "dark": "#1f1d18"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Press Ink",
+        "canonical": "#16130f",
+        "dark": "#ecebe4"
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2",
+        "canonical": "#4a443b",
+        "dark": "#c4c0b5"
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3",
+        "canonical": "#686256",
+        "dark": "#a19c90"
+      },
+      "hair": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#c9c5ba",
+        "dark": "#3b372f"
+      },
+      "fit-high": {
+        "role": "neutral",
+        "displayName": "Fit High",
+        "canonical": "#16130f",
+        "dark": "#ecebe4"
+      },
+      "fit-medium": {
+        "role": "neutral",
+        "displayName": "Fit Medium",
+        "canonical": "#8a8478",
+        "dark": "#8f897d"
+      },
+      "fit-low": {
+        "role": "neutral",
+        "displayName": "Fit Low",
+        "canonical": "#cfcabf",
+        "dark": "#4a463e"
+      },
+      "on-state": {
+        "role": "neutral",
+        "displayName": "On-state Text",
+        "canonical": "#ffffff",
+        "dark": "#16130f",
+        "purpose": "Text on vermilion and amber fills (NUEVA mark, checked Penalizar/Descartar segments)."
+      },
+      "dark-paper": {
+        "role": "neutral",
+        "displayName": "Newsprint (dark)",
+        "canonical": "#12110e",
+        "theme": "dark",
+        "lightCounterpart": "paper"
+      },
+      "dark-paper-2": {
+        "role": "neutral",
+        "displayName": "Newsprint Shade (dark)",
+        "canonical": "#1b1915",
+        "theme": "dark",
+        "lightCounterpart": "paper-2"
+      },
+      "dark-sheet": {
+        "role": "neutral",
+        "displayName": "Sheet (dark)",
+        "canonical": "#1f1d18",
+        "theme": "dark",
+        "lightCounterpart": "sheet"
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Press Ink (dark)",
+        "canonical": "#ecebe4",
+        "theme": "dark",
+        "lightCounterpart": "ink"
+      },
+      "dark-ink-2": {
+        "role": "neutral",
+        "displayName": "Ink 2 (dark)",
+        "canonical": "#c4c0b5",
+        "theme": "dark",
+        "lightCounterpart": "ink-2"
+      },
+      "dark-ink-3": {
+        "role": "neutral",
+        "displayName": "Ink 3 (dark)",
+        "canonical": "#a19c90",
+        "theme": "dark",
+        "lightCounterpart": "ink-3"
+      },
+      "dark-hair": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "canonical": "#3b372f",
+        "theme": "dark",
+        "lightCounterpart": "hair"
+      },
+      "dark-link-blue": {
+        "role": "secondary",
+        "displayName": "Press Blue (dark)",
+        "canonical": "#93b1ff",
+        "theme": "dark",
+        "lightCounterpart": "link-blue"
+      },
+      "dark-vermilion": {
+        "role": "tertiary",
+        "displayName": "Vermilion (dark)",
+        "canonical": "#ff6b55",
+        "theme": "dark",
+        "lightCounterpart": "vermilion"
+      },
+      "dark-amber": {
+        "role": "tertiary",
+        "displayName": "Burnt Amber (dark)",
+        "canonical": "#f0b44c",
+        "theme": "dark",
+        "lightCounterpart": "amber"
+      },
+      "dark-ledger-green": {
+        "role": "tertiary",
+        "displayName": "Ledger Green (dark)",
+        "canonical": "#74d394",
+        "theme": "dark",
+        "lightCounterpart": "ledger-green"
+      },
+      "dark-fit-medium": {
+        "role": "neutral",
+        "displayName": "Fit Medium (dark)",
+        "canonical": "#8f897d",
+        "theme": "dark",
+        "lightCounterpart": "fit-medium"
+      },
+      "dark-fit-low": {
+        "role": "neutral",
+        "displayName": "Fit Low (dark)",
+        "canonical": "#4a463e",
+        "theme": "dark",
+        "lightCounterpart": "fit-low"
+      },
+      "dark-on-state": {
+        "role": "neutral",
+        "displayName": "On-state Text (dark)",
+        "canonical": "#16130f",
+        "theme": "dark",
+        "lightCounterpart": "on-state"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display numeral",
+        "purpose": "Featured ad score only (88px on phone); same cut at 60px for rail tally and 30px for row scores."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Featured ad title, uppercase, text-wrap balance; 30px on phone."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Day-group headings over a 3px ink rule; masthead uses the same cut at 34px."
+      },
+      "lead-in": {
+        "displayName": "Classified lead-in",
+        "purpose": "Job title opening every row, uppercase; rail and dialog group headings share the cut."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Run-in text and snippets, tabular numerals, 68-78ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Filter toggles, alerts, row actions, phone tabs, 13.5px."
+      },
+      "mark": {
+        "displayName": "State mark",
+        "purpose": "11px uppercase state tags before the lead-in."
+      },
+      "display-phone": {
+        "displayName": "Display numeral (phone)",
+        "purpose": "Featured score at 88px under 760px."
+      },
+      "tally": {
+        "displayName": "Tally numeral",
+        "purpose": "Rail count of postings that pass the requirements, 60px."
+      },
+      "masthead": {
+        "displayName": "Masthead",
+        "purpose": "Band title, 34px uppercase."
+      },
+      "headline-phone": {
+        "displayName": "Headline (phone)",
+        "purpose": "Featured title at 30px under 760px."
+      },
+      "dialog-title": {
+        "displayName": "Dialog title",
+        "purpose": "Requirements dialog head title, 30px."
+      },
+      "row-score": {
+        "displayName": "Row score",
+        "purpose": "Score numeral on each classified row, 30px."
+      },
+      "row-score-phone": {
+        "displayName": "Row score (phone)",
+        "purpose": "Row score at 26px under 760px."
+      },
+      "masthead-phone": {
+        "displayName": "Masthead (phone)",
+        "purpose": "Band title at 24px under 760px."
+      },
+      "empty-title": {
+        "displayName": "Empty title",
+        "purpose": "Heading of an empty-list message, 20px."
+      },
+      "company": {
+        "displayName": "Company line",
+        "purpose": "Company and place under the featured title, 18px."
+      },
+      "rail-head": {
+        "displayName": "Rail heading",
+        "purpose": "Rail section headings over a 3px rule, 16px."
+      },
+      "group-head": {
+        "displayName": "Dialog group heading",
+        "purpose": "Requirement group headings in the dialog, 15px."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Buttons, tabs, facts row, requirement rows, 14px; 13px band buttons on phone."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Band meta, section counts, mode and date, run list, 13px."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Help text, rail descriptions, featured note, keyword tags, tooltip, 12.5px."
+      },
+      "meta-phone": {
+        "displayName": "Phone meta",
+        "purpose": "Band meta line on phone and run details, 12px."
+      },
+      "chart": {
+        "displayName": "Chart axis",
+        "purpose": "Axis labels in the day chart, 10.5px."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tooltip",
+        "value": "0 6px 18px rgba(0,0,0,.18)",
+        "purpose": "Chart hover tooltip."
+      },
+      {
+        "name": "toast",
+        "value": "0 8px 24px rgba(0,0,0,.2)",
+        "purpose": "Bottom-centre confirmation toast."
+      },
+      {
+        "name": "dialog",
+        "value": "0 18px 50px rgba(0,0,0,.3)",
+        "purpose": "Requirements dialog, over a rgba(22,19,15,.55) backdrop."
+      }
+    ],
+    "motion": [
+      {
+        "name": "expand",
+        "value": "180ms ease-out (opacity 0 -> 1, translateY(-4px) -> 0)",
+        "purpose": "Row detail expanding in place."
+      },
+      {
+        "name": "dim",
+        "value": "opacity 180ms ease-out to 0.42",
+        "purpose": "Sibling rows dim while one row is open."
+      },
+      {
+        "name": "button-invert",
+        "value": "background .15s, color .15s",
+        "purpose": "Button fill inversion on hover."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "none",
+        "purpose": "All animation and transition removed under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "dialog-stack",
+        "value": "600px"
+      },
+      {
+        "name": "phone",
+        "value": "760px"
+      },
+      {
+        "name": "rail-below",
+        "value": "1040px"
+      },
+      {
+        "name": "container",
+        "value": "1400px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid ink block for the main action (Descargar CV ATS); inverts on hover.",
+      "html": "<button class=\"ds-btn\"><svg class=\"ds-icon\" viewBox=\"0 0 16 16\"><path d=\"M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"square\"/></svg>Descargar CV ATS</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 16px; font: 700 14px/1.2 Archivo, system-ui, sans-serif; border: 2px solid #16130f; background: #16130f; color: #f4f3ef; border-radius: 0; cursor: pointer; transition: background .15s, color .15s; } .ds-btn:hover { background: transparent; color: #16130f; } .ds-btn:focus-visible { outline: 2px solid #1d4fd7; outline-offset: 2px; } .ds-icon { width: 16px; height: 16px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Outlined ink button for secondary actions (Abrir oferta, Cambiar requisitos); fills on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Abrir oferta</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 16px; font: 700 14px/1.2 Archivo, system-ui, sans-serif; border: 2px solid #16130f; background: transparent; color: #16130f; border-radius: 0; cursor: pointer; transition: background .15s, color .15s; } .ds-btn-ghost:hover { background: #16130f; color: #f4f3ef; } .ds-btn-ghost:focus-visible { outline: 2px solid #1d4fd7; outline-offset: 2px; }"
+    },
+    {
+      "name": "Section Band",
+      "kind": "nav",
+      "refersTo": "tab-active",
+      "description": "Process-yellow shell with 3px ink rule: masthead, tabs, band buttons.",
+      "html": "<header class=\"ds-band\"><h1 class=\"ds-band-title\">Ofertas de empleo</h1><nav class=\"ds-tabs\"><button aria-pressed=\"true\">Pendientes <span>(29)</span></button><button aria-pressed=\"false\">Todas</button><button aria-pressed=\"false\">Descartadas</button></nav><button class=\"ds-band-btn\">Buscar ahora</button></header>",
+      "css": ".ds-band { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding: 12px 24px; background: #ffd200; color: #16130f; border-bottom: 3px solid #16130f; font-family: Archivo, system-ui, sans-serif; } .ds-band-title { margin: 0; font-stretch: 62%; font-weight: 900; font-size: 34px; line-height: 1; text-transform: uppercase; letter-spacing: -.01em; } .ds-tabs { display: flex; gap: 2px; } .ds-tabs button { background: none; border: 0; padding: 8px 12px; min-height: 38px; font: 700 14px Archivo, system-ui, sans-serif; color: #16130f; cursor: pointer; } .ds-tabs button span { font-weight: 500; } .ds-tabs button:hover { background: rgba(22,19,15,.08); } .ds-tabs button[aria-pressed=\"true\"] { background: #16130f; color: #ffd200; } .ds-tabs button:focus-visible, .ds-band-btn:focus-visible { outline: 2px solid #1d4fd7; outline-offset: 2px; } .ds-band-btn { min-height: 40px; padding: 8px 16px; font: 700 14px Archivo, system-ui, sans-serif; border: 2px solid #16130f; background: #16130f; color: #ffd200; border-radius: 0; cursor: pointer; transition: background .15s, color .15s; } .ds-band-btn:hover { background: transparent; color: #16130f; }"
+    },
+    {
+      "name": "Filter Toggle",
+      "kind": "chip",
+      "refersTo": "toggle",
+      "description": "Square outlined toggle; pressed thickens to a 2px ink border.",
+      "html": "<button class=\"ds-tog\" aria-pressed=\"true\"><span class=\"ds-sw\"></span>Alto</button><button class=\"ds-tog\" aria-pressed=\"false\"><span class=\"ds-sw ds-sw-low\"></span>Bajo</button>",
+      "css": ".ds-tog { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 6px 11px; background: transparent; border: 1px solid #686256; color: #4a443b; font: 600 13.5px Archivo, system-ui, sans-serif; border-radius: 0; cursor: pointer; margin-right: 8px; } .ds-tog:hover { border-color: #16130f; color: #16130f; } .ds-tog[aria-pressed=\"true\"] { border: 2px solid #16130f; color: #16130f; font-weight: 800; padding: 5px 10px; } .ds-tog[aria-pressed=\"false\"] { border-color: #c9c5ba; color: #686256; } .ds-tog:focus-visible { outline: 2px solid #1d4fd7; outline-offset: 2px; } .ds-sw { width: 10px; height: 10px; display: inline-block; background: #16130f; border: 1px solid currentColor; } .ds-sw-low { background: #cfcabf; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square sheet field with ink-3 stroke and blue focus outline.",
+      "html": "<input class=\"ds-input\" type=\"search\" placeholder=\"Buscar puesto, empresa o lugar\">",
+      "css": ".ds-input { min-height: 38px; padding: 7px 10px; width: 320px; background: #ffffff; border: 1px solid #686256; border-radius: 0; color: #16130f; font: 400 15px Archivo, system-ui, sans-serif; } .ds-input::placeholder { color: #686256; } .ds-input:focus-visible { outline: 2px solid #1d4fd7; outline-offset: 2px; }"
+    },
+    {
+      "name": "Featured Ad",
+      "kind": "card",
+      "refersTo": "featured-ad",
+      "description": "The single framed element: 3px ink border, display score, headline title, facts row, actions.",
+      "html": "<article class=\"ds-feat\"><div class=\"ds-score\">85<small>de 100 · encaje alto</small></div><div><h2 class=\"ds-feat-title\">Consultor/a técnico-funcional Odoo</h2><div class=\"ds-co\">Grupo Renovae · Castellón de la Plana</div><div class=\"ds-facts\"><span>Semipresencial</span><span>Pide 2 años</span><span>Publicada 16 oct</span></div></div></article>",
+      "css": ".ds-feat { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 28px; padding: 22px 24px; background: #ffffff; border: 3px solid #16130f; color: #16130f; font-family: Archivo, system-ui, sans-serif; } .ds-score { font-stretch: 62%; font-weight: 900; font-size: 128px; line-height: .8; letter-spacing: -.03em; font-variant-numeric: tabular-nums; } .ds-score small { display: block; margin-top: 12px; font-size: 13px; font-stretch: 100%; font-weight: 700; letter-spacing: 0; color: #4a443b; } .ds-feat-title { margin: 0; font-stretch: 75%; font-weight: 900; font-size: 38px; line-height: 1.02; text-transform: uppercase; text-wrap: balance; } .ds-co { margin-top: 6px; font-size: 18px; font-weight: 600; } .ds-facts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 14px; font-size: 14px; font-weight: 700; } .ds-facts > span { border-top: 2px solid #16130f; padding-top: 4px; }"
+    },
+    {
+      "name": "Classified Row",
+      "kind": "custom",
+      "description": "Signature row: score numeral, bold condensed lead-in with run-in text, state mark, mode and date, blue links.",
+      "html": "<div class=\"ds-ad\"><div class=\"ds-n\">51<small>Medio</small></div><div class=\"ds-txt\"><span class=\"ds-mark\">Nueva</span><button class=\"ds-lead\">Programador Python/Google Cloud.</button> IOON, Spain. <b class=\"ds-al\">salario 30.000–32.000 €</b></div><div class=\"ds-when\">Presencial<small>20 oct · hace 4 días</small></div><div class=\"ds-acts\"><a href=\"#\">CV ATS</a><a href=\"#\">Abrir</a></div></div>",
+      "css": ".ds-ad { display: grid; grid-template-columns: 52px minmax(0, 1fr) 150px auto; gap: 4px 16px; padding: 12px 0; align-items: baseline; border-bottom: 1px solid #c9c5ba; font: 400 15px/1.45 Archivo, system-ui, sans-serif; color: #16130f; } .ds-n { font-stretch: 62%; font-weight: 900; font-size: 30px; line-height: 1; } .ds-n small { display: block; margin-top: 3px; font-stretch: 100%; font-size: 11px; font-weight: 700; color: #686256; text-transform: uppercase; letter-spacing: .04em; } .ds-txt { color: #4a443b; } .ds-lead { all: unset; cursor: pointer; font-stretch: 75%; font-weight: 900; font-size: 16.5px; text-transform: uppercase; color: #16130f; letter-spacing: .005em; } .ds-lead:hover { text-decoration: underline; text-underline-offset: 3px; } .ds-lead:focus-visible { outline: 2px solid #1d4fd7; outline-offset: 2px; } .ds-mark { display: inline-block; margin-right: 6px; padding: 1px 5px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; line-height: 1.4; vertical-align: 2px; background: #c8321e; color: #ffffff; } .ds-al { font-weight: 700; font-size: 13.5px; color: #1f6b3a; } .ds-when { font-size: 13px; font-weight: 600; color: #4a443b; } .ds-when small { display: block; font-weight: 500; color: #686256; } .ds-acts { display: flex; gap: 14px; font-size: 13.5px; font-weight: 700; } .ds-acts a { color: #1d4fd7; text-decoration: none; } .ds-acts a:hover { text-decoration: underline; }"
+    },
+    {
+      "name": "Hardness Segmented Control",
+      "kind": "custom",
+      "description": "Per-requirement No filtrar / Penalizar / Descartar control in the requirements dialog. Checked soft/hard fills carry on-state text (#ffffff light, #16130f dark).",
+      "html": "<div class=\"ds-seg\"><label>No filtrar</label><label class=\"ds-soft\">Penalizar</label><label class=\"ds-hard\">Descartar</label></div>",
+      "css": ".ds-seg { display: inline-flex; border: 2px solid #16130f; font: 600 13px Archivo, system-ui, sans-serif; } .ds-seg label { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 10px; color: #4a443b; cursor: pointer; } .ds-seg label + label { border-left: 1px solid #16130f; } .ds-seg label:hover { color: #16130f; } .ds-seg .ds-soft { background: #8f5400; color: #ffffff; } .ds-seg .ds-hard { background: #c8321e; color: #ffffff; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Classifieds Page",
+    "overview": "The dashboard is set like the \"Ofertas de empleo\" section of a newspaper: a process-yellow section band with a heavy ink rule on top, cool off-white newsprint below, and every posting composed as a classified ad whose job title is a bold condensed caps lead-in with the company, place and alerts run in after it. Hierarchy comes from size contrast and the width axis of a single variable family, not from boxes, cards, colour fills or charts. Numbers are set as type (score numerals, tallies) and charts are small, monochrome and secondary in the rail.\n\nDensity is high and calm: rows are separated by hairlines, groups by 3px ink rules, and only one element on the page, the featured ad, is framed. Colour is spent on meaning only: blue for links and actions, vermilion for new and hard discards, amber for penalized, green for matched salary and keywords. The dark theme swaps the paper for ink and keeps the yellow band unchanged.\n\nThe world explicitly refuses the generic SaaS dashboard arrangement of KPI cards, rounded panels and blue charts.",
+    "keyCharacteristics": [
+      "One family (Archivo variable), the width axis doing the hierarchy: 62% for display and numerals, 75% for lead-ins and sub-heads, 100% for text.",
+      "Square corners everywhere; rules instead of boxes.",
+      "A yellow section band with a 3px ink bottom rule as the shell, reused as the dialog head.",
+      "Exactly one framed element per view: the featured ad (3px ink border).",
+      "Tabular numerals throughout.",
+      "Motion limited to 180ms expand and dim."
+    ],
+    "rules": [
+      {
+        "name": "The Spent Colour Rule",
+        "body": "Vermilion, amber and green appear only as state; a coloured element must mean new, discarded, penalized or matched. Decoration is done with ink and rules.",
+        "section": "colors"
+      },
+      {
+        "name": "The Monochrome Data Rule",
+        "body": "Charts use the fit ramp of inks, never a hue palette.",
+        "section": "colors"
+      },
+      {
+        "name": "The Width Axis Rule",
+        "body": "Hierarchy is made by width and size, not by new families or colours: 62% for numerals and section heads, 75% for titles and lead-ins, 100% for reading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lead-In Rule",
+        "body": "Every posting row begins with its title in 75% black caps, then runs in company, place and alerts in regular text on the same line.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Frame Rule",
+        "body": "Only the featured ad is boxed on the page. Everything else is separated by rules, not containers.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do open every posting row with a 75%-width, weight-900 uppercase lead-in and run the rest of the ad in on the same line.",
+      "Do separate content with rules (1px hairline between items, 3px ink under headings) instead of boxes.",
+      "Do keep the yellow band and its 3px band-ink rule identical in light and dark themes.",
+      "Do set numerals in Archivo 62% black at the fixed sizes (128px, 60px, 30px) with tabular figures.",
+      "Do state why a posting is hidden or penalized with a mark and coloured alert text.",
+      "Do keep motion to the 180ms expand and dim, and drop it under prefers-reduced-motion."
+    ],
+    "donts": [
+      "Don't introduce rounded corners, KPI cards or panel containers; the only framed element is the featured ad.",
+      "Don't use vermilion, amber or green decoratively; they mean discarded/new, penalized and matched.",
+      "Don't add a second type family; change width and weight on Archivo instead.",
+      "Don't colour charts with a hue palette; use the fit ramp of inks.",
+      "Don't put shadows on page-plane elements; only tooltip, toast and dialog float."
+    ]
+  }
+}

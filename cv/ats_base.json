@@ -1,0 +1,107 @@
+{
+  "_comment": "Contenido del CV ATS (tools/ats_cv.py). Solo hechos del perfil de CLAUDE.md; el generador reordena y prioriza, nunca inventa. 'tags' = claves de tools/ats_cv.py KEYWORDS que cubre cada línea.",
+  "name": "Pablo Santana Susilla",
+  "headline": "Desarrollador Odoo · Python · PostgreSQL",
+  "contact": {
+    "location": "Las Palmas de Gran Canaria, España",
+    "email": "pasantanasu@hotmail.com",
+    "linkedin": "linkedin.com/in/pablo-santana-susilla-092248314",
+    "availability": "Disponible para trabajar en toda España (presencial, híbrido o remoto)"
+  },
+  "experience_start": "2025-02-01",
+  "dev_start": "2025-08-01",
+  "summary": [
+    "Desarrollador Odoo con {dev_years} de experiencia construyendo módulos a medida desde cero y manteniéndolos en producción, y {total_years} en el departamento de IT de Orbalia.",
+    "Uno de los desarrolladores principales del ERP Odoo sobre el que opera toda la empresa (25 personas): recojo requisitos con negocio, diseño el modelo de datos, desarrollo, despliego y mantengo.",
+    "Diseñé y ejecuté la migración desde ActiveCampaign a Odoo (más de 7.000 expedientes, 10.000 contactos y 1.200 empresas) y administro la infraestructura AWS donde corre el ERP.",
+    "Ingeniero Informático por la ULPGC, con un año de estudios en Vilnius University."
+  ],
+  "skills": [
+    {"label": "Odoo", "tags": ["odoo", "erp"]},
+    {"label": "Odoo ORM (modelos, herencia, campos computados)", "tags": ["orm", "odoo"]},
+    {"label": "Python", "tags": ["python"]},
+    {"label": "PostgreSQL", "tags": ["postgresql", "sql"]},
+    {"label": "SQL", "tags": ["sql"]},
+    {"label": "Vistas XML", "tags": ["xml"]},
+    {"label": "Informes QWeb", "tags": ["qweb"]},
+    {"label": "Reglas de seguridad y permisos", "tags": ["security"]},
+    {"label": "API REST", "tags": ["rest", "api"]},
+    {"label": "XML-RPC", "tags": ["xmlrpc", "api"]},
+    {"label": "Integraciones entre sistemas", "tags": ["integration", "api"]},
+    {"label": "Migración de datos", "tags": ["migration"]},
+    {"label": "Implantación de ERP", "tags": ["erp", "implementation"]},
+    {"label": "Toma de requisitos con negocio", "tags": ["requirements", "functional"]},
+    {"label": "AWS", "tags": ["aws", "cloud"]},
+    {"label": "Linux", "tags": ["linux"]},
+    {"label": "Git", "tags": ["git"]},
+    {"label": "JavaScript", "tags": ["javascript"]},
+    {"label": "Laravel", "tags": ["laravel", "php"]},
+    {"label": "Redes Cisco (CCNAv7)", "tags": ["networking"]}
+  ],
+  "experience": [
+    {
+      "title": "Consultor IT – Desarrollador Odoo (Junior II)",
+      "company": "Orbalia",
+      "location": "Las Palmas de Gran Canaria",
+      "start": "08/2026",
+      "end": "Actualidad",
+      "bullets": [
+        {"text": "Uno de los desarrolladores principales del ERP Odoo sobre el que opera toda la empresa (25 personas).", "tags": ["odoo", "erp"]},
+        {"text": "Diseñé y desarrollé en solitario el módulo de Proyectos IT, la detección automática de clientes sujetos a la Ley de Transparencia de Canarias y la creación automática de la cuenta contable de cada cliente.", "tags": ["odoo", "python", "accounting", "compliance", "modules"]},
+        {"text": "Codesarrollo de los módulos de Financiación y Deducciones fiscales, y migración de los expedientes existentes desde el módulo de Subvenciones a ambos.", "tags": ["odoo", "modules", "migration", "accounting"]},
+        {"text": "Estabilización tras la puesta en producción: cargas de datos complementarias, corrección de incidencias y ajustes a partir del uso real.", "tags": ["support", "migration", "odoo"]},
+        {"text": "Administración de la infraestructura en AWS (despliegues, actualizaciones, disponibilidad) como una de las dos personas con acceso al entorno.", "tags": ["aws", "cloud", "linux", "deploy"]},
+        {"text": "Mejoras de usabilidad en el chatter, las actividades y la mensajería interna de Odoo.", "tags": ["odoo", "frontend"]}
+      ]
+    },
+    {
+      "title": "Consultor IT – Desarrollador Odoo (Junior I)",
+      "company": "Orbalia",
+      "location": "Las Palmas de Gran Canaria",
+      "start": "08/2025",
+      "end": "07/2026",
+      "bullets": [
+        {"text": "Desarrollé la primera versión del módulo base de Expedientes de subvenciones (Odoo, Python, XML), el núcleo del ERP que sustituyó a ActiveCampaign; más de 230 commits hasta la puesta en producción.", "tags": ["odoo", "python", "xml", "modules", "erp", "git"]},
+        {"text": "Diseñé y ejecuté la migración completa desde ActiveCampaign con scripts en Python que conectaban su API REST con la API XML-RPC de Odoo: más de 7.000 expedientes, 10.000 contactos y 1.200 empresas sin perder relaciones.", "tags": ["migration", "python", "rest", "xmlrpc", "api", "integration"]},
+        {"text": "Definí junto al equipo los modelos de datos transversales (Contactos, Clientes, Grupos empresariales, Colaboradores).", "tags": ["orm", "data_model", "requirements"]},
+        {"text": "Uno de los principales contribuidores de las vistas del módulo y de la gestión de convocatorias.", "tags": ["xml", "odoo"]},
+        {"text": "Asumí la administración de sistemas en producción sobre AWS (despliegues, actualizaciones, paradas y reinicios).", "tags": ["aws", "cloud", "linux", "deploy"]}
+      ]
+    },
+    {
+      "title": "Consultor IT en formación",
+      "company": "Orbalia",
+      "location": "Las Palmas de Gran Canaria",
+      "start": "02/2025",
+      "end": "07/2025",
+      "bullets": [
+        {"text": "Consultor tecnológico en el programa Kit Consulting: asesoré a pymes en el diagnóstico de sus necesidades y en la selección e implantación de soluciones digitales.", "tags": ["consulting", "functional", "requirements", "implementation"]}
+      ]
+    },
+    {
+      "title": "Desarrollador web",
+      "company": "Tca-tik",
+      "location": "Las Palmas de Gran Canaria",
+      "start": "01/2024",
+      "end": "04/2024",
+      "bullets": [
+        {"text": "Desarrollo web con Laravel y JavaScript.", "tags": ["laravel", "php", "javascript", "frontend"]}
+      ]
+    }
+  ],
+  "education": [
+    {"title": "Grado en Ingeniería Informática", "school": "Universidad de Las Palmas de Gran Canaria (ULPGC)", "dates": "2018 – 2024"},
+    {"title": "Bachelor of Technology (BTech), Computer Engineering – año de estudios en el extranjero", "school": "Vilnius University (Lituania)", "dates": "09/2021 – 06/2022"}
+  ],
+  "certifications": [
+    "Data Analysis Using Python",
+    "Python for Data Science",
+    "CCNAv7: Introduction to Networks",
+    "CCNAv7: Switching, Routing, and Wireless Essentials",
+    "CCNAv7: Enterprise Networking, Security, and Automation"
+  ],
+  "languages": [
+    "Español: nativo",
+    "Inglés: básico"
+  ]
+}

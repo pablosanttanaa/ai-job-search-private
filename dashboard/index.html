@@ -5,336 +5,517 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ofertas de empleo</title>
 <style>
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-latin.woff2") format("woff2");
+  font-weight: 100 900; font-stretch: 62% 125%; font-display: swap;
+}
 :root {
   color-scheme: light;
-  --page: #f9f9f7;
-  --surface-1: #fcfcfb;
-  --surface-2: #f0efec;
-  --text-primary: #0b0b0b;
-  --text-secondary: #52514e;
-  --text-muted: #898781;
-  --grid: #e1e0d9;
-  --axis: #c3c2b7;
-  --border: rgba(11,11,11,0.10);
-  --series-1: #2a78d6;
-  --fit-high: #184f95;
-  --fit-medium: #3987e5;
-  --fit-low: #86b6ef;
-  --warning: #fab219;
-  --critical: #d03b3b;
-  --good: #0ca30c;
-  --accent: #2a78d6;
-  --accent-ink: #ffffff;
-  --new: #0b7f35;
-  --new-bg: rgba(12,163,12,0.07);
+  --paper: #f4f3ef;
+  --paper-2: #eae8e1;
+  --sheet: #ffffff;
+  --ink: #16130f;
+  --ink-2: #4a443b;
+  --ink-3: #686256;
+  --hair: #c9c5ba;
+  --rule: #16130f;
+  --band: #ffd200;
+  --band-ink: #16130f;
+  --link: #1d4fd7;
+  --new: #c8321e;
+  --warn: #8f5400;
+  --good: #1f6b3a;
+  --on-state: #ffffff;   /* text on vermilion/amber fills */
+  --fit-high: #16130f;
+  --fit-medium: #8a8478;
+  --fit-low: #cfcabf;
+  --dim: .42;
 }
 @media (prefers-color-scheme: dark) {
-  :root:where(:not([data-theme="light"])) {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page: #0d0d0d;
-    --surface-1: #1a1a19;
-    --surface-2: #262624;
-    --text-primary: #f0efec;
-    --text-secondary: #c3c2b7;
-    --text-muted: #898781;
-    --grid: #2c2c2a;
-    --axis: #383835;
-    --border: rgba(255,255,255,0.10);
-    --series-1: #3987e5;
-    --fit-high: #9ec5f4;
-    --fit-medium: #5598e7;
-    --fit-low: #1c5cab;
-    --accent: #3987e5;
-    --accent-ink: #0b0b0b;
-    --new: #4cd07d;
-    --new-bg: rgba(76,208,125,0.09);
+    --paper: #12110e; --paper-2: #1b1915; --sheet: #1f1d18;
+    --ink: #ecebe4; --ink-2: #c4c0b5; --ink-3: #a19c90; --hair: #3b372f; --rule: #ecebe4;
+    --link: #93b1ff; --new: #ff6b55; --warn: #f0b44c; --good: #74d394; --on-state: #16130f;
+    --fit-high: #ecebe4; --fit-medium: #8f897d; --fit-low: #4a463e;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #262624;
-  --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #898781;
-  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
-  --series-1: #3987e5; --fit-high: #9ec5f4; --fit-medium: #5598e7; --fit-low: #1c5cab;
-  --accent: #3987e5; --accent-ink: #0b0b0b;
-  --new: #4cd07d; --new-bg: rgba(76,208,125,0.09);
+  --paper: #12110e; --paper-2: #1b1915; --sheet: #1f1d18;
+  --ink: #ecebe4; --ink-2: #c4c0b5; --ink-3: #a19c90; --hair: #3b372f; --rule: #ecebe4;
+  --link: #93b1ff; --new: #ff6b55; --warn: #f0b44c; --good: #74d394; --on-state: #16130f;
+  --fit-high: #ecebe4; --fit-medium: #8f897d; --fit-low: #4a463e;
 }
 * { box-sizing: border-box; }
+html { scrollbar-color: var(--ink-3) var(--paper); }
 body {
-  margin: 0; background: var(--page); color: var(--text-primary);
-  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 15px/1.45 "Archivo", system-ui, sans-serif; font-stretch: 100%;
+  font-variant-numeric: tabular-nums;
 }
-.wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px 48px; }
-header { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
-h1 { font-size: 24px; margin: 0 0 4px; font-weight: 650; }
-.sub { color: var(--text-secondary); margin: 0; }
-.run-box { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.run-note { color: var(--text-secondary); font-size: 13px; text-align: right; }
-button.primary {
-  background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px;
-  padding: 10px 18px; font: inherit; font-weight: 600; cursor: pointer; min-height: 40px;
-  display: inline-flex; align-items: center; gap: 8px;
+::selection { background: var(--band); color: var(--band-ink); }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+a { color: var(--link); text-underline-offset: 3px; }
+button, input, select { font: inherit; color: inherit; }
+.icon { width: 16px; height: 16px; flex: none; }
+.cond { font-stretch: 62%; font-weight: 900; letter-spacing: -.01em; }
+
+/* ---------- section band (shell) ---------- */
+.band { background: var(--band); color: var(--band-ink); border-bottom: 3px solid var(--band-ink); }
+.band-in { max-width: 1400px; margin: 0 auto; padding: 12px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; }
+.band h1 { margin: 0; font-stretch: 62%; font-weight: 900; font-size: 34px; line-height: 1; text-transform: uppercase; letter-spacing: -.01em; }
+.tabs { display: flex; gap: 2px; }
+.tabs button { background: none; border: 0; padding: 8px 12px; font-weight: 700; font-size: 14px; cursor: pointer; color: var(--band-ink); min-height: 38px; }
+.tabs button:hover { background: rgba(22,19,15,.08); }
+.tabs button[aria-pressed="true"] { background: var(--band-ink); color: var(--band); }
+.tabs .n { font-weight: 500; margin-left: 4px; }
+.band .meta { flex: 1; min-width: 220px; font-size: 13px; font-weight: 600; text-align: right; }
+.band .folio { font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
+.band .meta span { display: inline-block; }
+.band .meta .sep { margin: 0 .4em; }
+.band-actions { display: flex; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 8px 16px;
+  font-weight: 700; font-size: 14px; border: 2px solid var(--ink); background: var(--ink); color: var(--paper);
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: background .15s, color .15s;
 }
-button.primary:disabled { opacity: .6; cursor: progress; }
-button.secondary {
-  background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px;
-  padding: 10px 14px; font: inherit; font-weight: 600; cursor: pointer; min-height: 40px;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-button.secondary:hover { background: var(--surface-2); }
-.spin { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: s 0.8s linear infinite; display: none; }
-button.busy .spin { display: inline-block; }
+.btn:hover { background: transparent; color: var(--ink); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); }
+.band .btn { border-color: var(--band-ink); background: var(--band-ink); color: var(--band); }
+.band .btn:hover { background: transparent; color: var(--band-ink); }
+.band .btn.ghost { background: transparent; color: var(--band-ink); }
+.band .btn.ghost:hover { background: var(--band-ink); color: var(--band); }
+.btn:disabled { opacity: .6; cursor: progress; }
+.spin { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: s .8s linear infinite; display: none; }
+.btn.busy .spin { display: inline-block; }
+.btn.busy .icon { display: none; }
 @keyframes s { to { transform: rotate(360deg); } }
 
-.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+/* ---------- filters ---------- */
+.wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px 56px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--hair); }
 .filters input[type=search], .filters select {
-  font: inherit; color: var(--text-primary); background: var(--surface-1);
-  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; min-height: 36px;
+  background: var(--sheet); border: 1px solid var(--ink-3); padding: 7px 10px; min-height: 38px; border-radius: 0;
 }
-.filters input[type=search] { flex: 1 1 220px; min-width: 0; }
-.chip {
-  font: inherit; font-size: 13px; border: 1px solid var(--border); background: var(--surface-1);
-  color: var(--text-secondary); border-radius: 999px; padding: 6px 12px; cursor: pointer;
-  display: inline-flex; align-items: center; gap: 6px; min-height: 36px;
+.filters input[type=search] { flex: 1 1 240px; min-width: 0; }
+.chips { display: contents; }
+.filters input::placeholder { color: var(--ink-3); }
+.tog {
+  background: transparent; border: 1px solid var(--ink-3); padding: 6px 11px; min-height: 38px; cursor: pointer;
+  font-size: 13.5px; font-weight: 600; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px;
 }
-.chip[aria-pressed="true"] { color: var(--text-primary); border-color: var(--text-secondary); font-weight: 600; }
-.swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
-.chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--new); flex: none; }
-.chip .n { font-variant-numeric: tabular-nums; color: var(--text-muted); font-weight: 400; }
-.prefs { color: var(--text-muted); font-size: 12.5px; margin: -6px 0 16px; }
-.prefs button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+.tog:hover { border-color: var(--ink); color: var(--ink); }
+.tog[aria-pressed="true"] { border: 2px solid var(--ink); color: var(--ink); font-weight: 800; padding: 5px 10px; }
+.tog[aria-pressed="false"] { border-color: var(--hair); color: var(--ink-3); }
+.tog .sw { width: 10px; height: 10px; display: inline-block; border: 1px solid currentColor; }
 
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
-.card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
-.kpi .label { color: var(--text-secondary); font-size: 13px; }
-.kpi .value { font-size: 28px; font-weight: 650; margin-top: 2px; }
-.kpi.hero .value { font-size: 48px; line-height: 1.05; }
-.kpi .hint { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
-.kpi.clickable { cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; }
-.kpi.clickable:hover, .kpi.clickable[aria-pressed="true"] { border-color: var(--new); }
-.kpi.new-kpi .value { color: var(--new); }
+/* ---------- layout ---------- */
+.page { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; padding-top: 24px; align-items: start; }
+@media (max-width: 1040px) { .page { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
+@media (max-width: 760px) {
+  .band-in { padding: 10px 16px; gap: 6px 12px; }
+  .band h1 { font-size: 24px; }
+  .tabs button { padding: 6px 8px; min-height: 34px; font-size: 13.5px; }
+  .band .meta { flex: 1 0 100%; min-width: 0; text-align: left; order: 3; font-size: 12px; line-height: 1.3; }
+  .band .meta .opt-m { display: none; }
+  .band-actions { order: 4; }
+  .band .btn { min-height: 36px; padding: 6px 10px; font-size: 13px; }
+  .band .btn .lbl-l { display: none; }
+  .wrap { padding: 0 16px 48px; }
+  .filters { padding: 10px 0; }
+  .filters input[type=search] { flex: 1 0 100%; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; width: 100%; }
+  .chips > * { flex: none; }
+  .page { padding-top: 14px; }
+}
 
-.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 12px; margin-bottom: 16px; }
-@media (max-width: 400px) { .charts { grid-template-columns: 1fr; } }
-.card h2 { font-size: 15px; margin: 0 0 2px; font-weight: 600; }
-.card .desc { color: var(--text-secondary); font-size: 12.5px; margin: 0 0 12px; }
-.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 8px; }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
+/* ---------- featured ad ---------- */
+.feat {
+  border: 3px solid var(--rule); background: var(--sheet); padding: 22px 24px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 28px; align-items: start;
+}
+.feat .score { font-stretch: 62%; font-weight: 900; font-size: 128px; line-height: .8; letter-spacing: -.03em; }
+.feat .score small { display: block; font-size: 13px; font-stretch: 100%; font-weight: 700; letter-spacing: 0; margin-top: 12px; color: var(--ink-2); }
+.feat h2 { overflow-wrap: anywhere; margin: 0; font-stretch: 75%; font-weight: 900; font-size: 38px; line-height: 1.02; text-transform: uppercase; letter-spacing: -.005em; text-wrap: balance; }
+.feat .co { font-size: 18px; font-weight: 600; margin-top: 6px; }
+.feat p { margin: 12px 0 0; max-width: 68ch; color: var(--ink-2); }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 14px; font-size: 14px; font-weight: 700; }
+.facts > span { border-top: 2px solid var(--rule); padding-top: 4px; }
+.facts > .bad { border-color: var(--new); color: var(--new); }
+.facts > .warn { border-color: var(--warn); color: var(--warn); }
+.feat .acts { display: flex; flex-direction: column; gap: 8px; min-width: 190px; }
+.feat .why { font-size: 12.5px; color: var(--ink-3); max-width: 190px; }
+@media (max-width: 760px) {
+  .feat { grid-template-columns: 1fr; padding: 18px; }
+  .feat .score { font-size: 88px; display: flex; align-items: baseline; gap: 12px; }
+  .feat .score small { margin: 0; }
+  .feat h2 { font-size: 30px; }
+  .feat .acts { flex-direction: row; flex-wrap: wrap; min-width: 0; }
+  .feat .acts .btn { flex: 1 1 0; padding: 8px 10px; }
+  .feat .why { flex: 1 0 100%; max-width: none; }
+  .feat p { display: none; }
+}
 
-.hbars { display: grid; grid-template-columns: minmax(80px, max-content) 1fr; gap: 6px 10px; align-items: center; }
-.hbars .lab { color: var(--text-secondary); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
-.hbars .track { display: flex; align-items: center; gap: 8px; min-width: 0; height: 26px; cursor: default; }
-.hbars .bar { height: 16px; border-radius: 0 4px 4px 0; min-width: 2px; }
-.hbars .val { font-size: 12.5px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
-.empty { color: var(--text-muted); font-size: 13px; padding: 12px 0; }
+/* ---------- state marks ---------- */
+.mark { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: 1px 5px; vertical-align: 2px; margin-right: 6px; line-height: 1.4; }
+.mark.new { background: var(--new); color: var(--on-state); }
+.mark.ranked { border: 1px solid var(--ink-2); color: var(--ink-2); padding: 0 4px; }
+.mark.expired { border: 1px dashed var(--ink-3); color: var(--ink-3); padding: 0 4px; }
+.mark.skipped { background: var(--ink-3); color: var(--paper); text-decoration: line-through; }
+.mark.pen { border: 1px solid var(--warn); color: var(--warn); padding: 0 4px; }
+.nw { white-space: nowrap; }
+.mark.out { border: 1px solid var(--new); color: var(--new); padding: 0 4px; }
 
-svg text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--text-muted); }
+/* ---------- classified list ---------- */
+.sect { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 34px 0 0; padding-bottom: 5px; border-bottom: 3px solid var(--rule); }
+.sect h2 { margin: 0; font-stretch: 62%; font-weight: 900; font-size: 28px; line-height: 1.05; text-transform: uppercase; }
+.sect span { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.ads { list-style: none; margin: 0; padding: 0; }
+.ad { border-bottom: 1px solid var(--hair); transition: opacity .18s ease-out; }
+.ads.focus .ad:not(.open) { opacity: var(--dim); }
+.ads.focus .ad:not(.open):hover { opacity: 1; }
+.ad-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) 150px auto; gap: 4px 16px; padding: 12px 0; align-items: baseline; }
+.ad .n { font-stretch: 62%; font-weight: 900; font-size: 30px; line-height: 1; }
+.ad .n small { display: block; font-stretch: 100%; font-size: 11px; font-weight: 700; color: var(--ink-3); margin-top: 3px; text-transform: uppercase; letter-spacing: .04em; }
+.ad .txt { color: var(--ink-2); min-width: 0; overflow-wrap: anywhere; }
+.lead {
+  all: unset; cursor: pointer; font-stretch: 75%; font-weight: 900; font-size: 16.5px; text-transform: uppercase; color: var(--ink);
+  letter-spacing: .005em;
+}
+.lead:hover { text-decoration: underline; text-underline-offset: 3px; }
+.lead:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.al { font-weight: 700; font-size: 13.5px; }
+.al.bad { color: var(--new); }
+.al.warn { color: var(--warn); }
+.al.good { color: var(--good); }
+.al.plain { color: var(--ink-3); font-weight: 600; }
+.ad .when { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.ad .when small { display: block; font-weight: 500; color: var(--ink-3); }
+.ad .acts { display: flex; gap: 14px; font-size: 13.5px; font-weight: 700; white-space: nowrap; }
+.ad .acts a { display: inline-flex; align-items: center; gap: 5px; text-decoration: none; }
+.ad .acts a:hover { text-decoration: underline; }
+.ad .acts .icon { width: 14px; height: 14px; }
+.detail { padding: 0 0 18px 68px; color: var(--ink-2); font-size: 14px; display: none; }
+.ad.open .detail { display: block; animation: rise .18s ease-out; }
+@keyframes rise { from { opacity: 0; transform: translateY(-4px); } }
+.detail p { margin: 8px 0 0; max-width: 78ch; }
+.detail h4 { margin: 14px 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); }
+.detail ul { margin: 0; padding-left: 18px; }
+.kw { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 4px; }
+.kw span { font-size: 12.5px; font-weight: 600; padding: 1px 6px; border: 1px solid var(--hair); }
+.kw.have span { border-color: var(--good); color: var(--good); }
+.kw.miss span { border-color: var(--warn); color: var(--warn); }
+.detail .foot { margin-top: 14px; font-size: 12.5px; color: var(--ink-3); }
+.detail .btn { margin-top: 14px; min-height: 36px; padding: 6px 14px; }
+@media (max-width: 760px) {
+  .ad-row { grid-template-columns: 40px minmax(0, 1fr) auto; gap: 2px 10px; padding: 10px 0; }
+  .ad .txt { grid-column: 2 / 4; }
+  .ad .when { grid-column: 2; font-size: 12.5px; }
+  .ad .when small { display: inline; }
+  .ad .when small::before { content: " · "; }
+  .ad .when .age { display: none; }
+  .ad .acts { grid-column: 3; gap: 14px; }
+  .ad .acts a { min-height: 32px; }
+  .ad .n { font-size: 26px; }
+  .detail { padding-left: 0; }
+}
+.empty { padding: 28px 0; color: var(--ink-2); max-width: 60ch; }
+.empty strong { display: block; font-stretch: 75%; font-weight: 900; font-size: 20px; text-transform: uppercase; color: var(--ink); margin-bottom: 6px; }
+.empty .btn { margin: 12px 8px 0 0; }
+.skel { height: 14px; background: var(--paper-2); margin: 16px 0; }
+.skel.w1 { width: 72%; } .skel.w2 { width: 58%; } .skel.w3 { width: 66%; }
 
-.tbl-card { padding: 0; overflow: hidden; }
-.tbl-head { padding: 16px 16px 8px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: baseline; }
-.tbl-scroll { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 760px; }
-th, td { text-align: left; padding: 10px 12px; border-top: 1px solid var(--grid); vertical-align: top; }
-th { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .03em; cursor: pointer; white-space: nowrap; user-select: none; }
-th[aria-sort] { color: var(--text-primary); }
-tbody tr.row { cursor: pointer; }
-tbody tr.row:hover { background: var(--surface-2); }
-tbody tr.row.is-new { background: var(--new-bg); }
-tbody tr.row.is-new:hover { background: var(--surface-2); }
-tbody tr.row.is-new td:first-child { box-shadow: inset 3px 0 0 var(--new); }
-.new-badge { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--new); border: 1px solid currentColor; border-radius: 4px; padding: 0 5px; margin-right: 6px; vertical-align: 1px; }
-td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
-td:nth-child(2) { min-width: 230px; }
-td:nth-child(3) { min-width: 150px; }
-.meter { display: flex; align-items: center; gap: 8px; }
-.meter .m { width: 56px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
-.meter .m i { display: block; height: 100%; border-radius: 3px; }
-.title { font-weight: 600; }
-.company { color: var(--text-secondary); font-size: 13px; }
-.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; white-space: nowrap; }
-.flags { display: flex; flex-wrap: wrap; gap: 4px; }
-.flag { font-size: 11.5px; border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; color: var(--text-secondary); white-space: nowrap; }
-.flag.warn { border-color: var(--warning); }
-.flag.bad { border-color: var(--critical); }
-.flag.good { border-color: var(--good); }
-a { color: var(--accent); }
-tr.detail td { background: var(--surface-2); color: var(--text-secondary); font-size: 13px; }
-tr.detail ul { margin: 6px 0 0; padding-left: 18px; }
-.status { font-size: 12px; color: var(--text-muted); }
-
-.runs { list-style: none; padding: 0; margin: 0; }
-.runs li { padding: 8px 0; border-top: 1px solid var(--grid); display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; }
-.runs li:first-child { border-top: 0; }
-.runs .when { min-width: 150px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
-.runs .err { color: var(--text-muted); }
-.runs details { flex-basis: 100%; color: var(--text-muted); font-size: 12px; }
+/* ---------- rail ---------- */
+.rail { display: grid; gap: 30px; }
+.rail h2 { margin: 0 0 8px; padding-bottom: 4px; border-bottom: 3px solid var(--rule); font-stretch: 75%; font-weight: 900; font-size: 16px; text-transform: uppercase; }
+.rail .desc { margin: -2px 0 10px; font-size: 12.5px; color: var(--ink-3); }
+.req { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; padding: 6px 0; border-bottom: 1px solid var(--hair); }
+.req i { font-style: normal; font-weight: 700; text-align: right; }
+.req i.hard { color: var(--new); }
+.req i.soft { color: var(--warn); }
+.req i.off { color: var(--ink-3); font-weight: 500; }
+.tally { display: flex; align-items: baseline; gap: 10px; margin-top: 14px; }
+.tally b { font-stretch: 62%; font-weight: 900; font-size: 60px; line-height: .9; }
+.tally span { font-weight: 600; }
+.tally-note { font-size: 13px; color: var(--ink-2); margin-top: 6px; }
+.rail .btn { margin-top: 12px; width: 100%; }
+.agate { font-size: 13.5px; }
+.agate div { display: flex; align-items: baseline; gap: 6px; padding: 3px 0; }
+.agate span { color: var(--ink-2); white-space: nowrap; }
+.agate i { flex: 1; border-bottom: 1px dotted var(--ink-3); transform: translateY(-3px); min-width: 12px; }
+.agate b { font-stretch: 75%; font-weight: 900; font-size: 15px; min-width: 2ch; text-align: right; }
+.agate .sw { align-self: center; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-2); margin-bottom: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.sw { width: 10px; height: 10px; display: inline-block; flex: none; }
+.none { color: var(--ink-3); font-size: 13px; }
+svg text { font: 600 10.5px "Archivo", system-ui, sans-serif; fill: var(--ink-3); }
+.runs { list-style: none; margin: 0; padding: 0; }
+.runs li { padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 13px; display: flex; flex-wrap: wrap; gap: 2px 10px; }
+.runs .w { font-weight: 700; min-width: 116px; }
+.runs .bad { color: var(--new); font-weight: 700; }
+.runs details { flex-basis: 100%; color: var(--ink-3); font-size: 12px; }
+.runs summary { cursor: pointer; }
 
 #tip {
-  position: fixed; pointer-events: none; z-index: 10; background: var(--surface-1); color: var(--text-primary);
-  border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 12.5px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.12); display: none; max-width: 260px;
+  position: fixed; pointer-events: none; z-index: 10; background: var(--ink); color: var(--paper);
+  padding: 6px 9px; font-size: 12.5px; display: none; max-width: 240px; box-shadow: 0 6px 18px rgba(0,0,0,.18);
 }
+.toast {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper);
+  padding: 10px 16px; font-size: 14px; font-weight: 600; display: none; z-index: 20; max-width: calc(100% - 32px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+/* ---------- requirements dialog ---------- */
 dialog {
-  border: 1px solid var(--border); border-radius: 14px; background: var(--surface-1); color: var(--text-primary);
-  padding: 0; width: min(540px, calc(100% - 32px)); max-height: calc(100% - 32px); box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  border: 3px solid var(--rule); border-radius: 0; background: var(--paper); color: var(--ink); padding: 0;
+  width: min(740px, calc(100% - 24px)); max-height: calc(100% - 24px); box-shadow: 0 18px 50px rgba(0,0,0,.3);
 }
-dialog::backdrop { background: rgba(0,0,0,.45); }
-.dlg-head { padding: 20px 20px 4px; }
-.dlg-head h2 { font-size: 18px; margin: 0 0 4px; font-weight: 650; }
-.dlg-body { padding: 12px 20px 4px; }
-.dlg-foot { padding: 12px 20px 20px; display: flex; justify-content: flex-end; gap: 8px; }
-.field, dialog fieldset { margin: 0 0 18px; }
-dialog fieldset { border: 0; padding: 0; }
-.field .lab, dialog legend { display: block; font-weight: 600; margin-bottom: 6px; padding: 0; }
-.field input[type=text], .field input[type=number] {
-  width: 100%; font: inherit; color: var(--text-primary); background: var(--page);
-  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; min-height: 38px;
-}
-.help { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
-.opts { display: flex; flex-wrap: wrap; gap: 8px; }
-.opt { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; cursor: pointer; min-height: 38px; }
-.opt:has(input:checked) { border-color: var(--accent); background: var(--surface-2); }
-.opt input { margin: 0; accent-color: var(--accent); }
-.dlg-error { color: var(--critical); font-size: 13px; margin: 0; min-height: 1.2em; }
-.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--text-primary); color: var(--page); padding: 10px 16px; border-radius: 8px; font-size: 13px; display: none; z-index: 20; max-width: calc(100% - 32px); }
+dialog::backdrop { background: rgba(22,19,15,.55); }
+.dlg-head { background: var(--band); color: var(--band-ink); padding: 18px 22px 16px; border-bottom: 3px solid var(--band-ink); }
+.dlg-head h2 { margin: 0 0 6px; font-stretch: 62%; font-weight: 900; font-size: 30px; line-height: 1; text-transform: uppercase; }
+.dlg-head p { margin: 0; font-size: 14px; max-width: 70ch; }
+.presets { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 14px; }
+.presets .lab { font-weight: 700; margin-right: 6px; font-size: 14px; }
+.presets button { background: transparent; border: 2px solid var(--band-ink); color: var(--band-ink); padding: 5px 12px; font-weight: 700; font-size: 13.5px; cursor: pointer; min-height: 36px; }
+.presets button[aria-pressed="true"] { background: var(--band-ink); color: var(--band); }
+.preset-note { font-size: 13px; font-weight: 600; }
+.dlg-body { padding: 6px 22px 6px; }
+h3.grp { margin: 22px 0 0; padding-bottom: 4px; border-bottom: 3px solid var(--rule); font-stretch: 75%; font-weight: 900; font-size: 15px; text-transform: uppercase; }
+.rule { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 18px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--hair); }
+.rule-main { min-width: 0; }
+.rule .lab, .field .lab { display: block; font-weight: 700; margin-bottom: 4px; }
+.rule.is-off .rule-main .lab { color: var(--ink-2); font-weight: 600; }
+.help { color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }
+.rule input[type=text] { width: 100%; background: var(--sheet); border: 1px solid var(--ink-3); padding: 7px 10px; min-height: 38px; border-radius: 0; }
+input.inline-num { width: 62px; background: var(--sheet); border: 1px solid var(--ink-3); border-radius: 0; padding: 3px 6px; margin: 0 2px; text-align: center; font-weight: 700; }
+input.inline-num.wide { width: 96px; }
+.opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.opt { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--ink-3); padding: 6px 10px; cursor: pointer; min-height: 36px; font-size: 14px; }
+.opt:has(input:checked) { border-color: var(--ink); background: var(--sheet); font-weight: 600; }
+.opt input { margin: 0; accent-color: var(--ink); }
+.seg { display: inline-flex; border: 2px solid var(--ink); flex: none; }
+.seg label { position: relative; padding: 6px 10px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--ink-2); white-space: nowrap; min-height: 34px; display: inline-flex; align-items: center; }
+.seg label + label { border-left: 1px solid var(--ink); }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--link); outline-offset: -3px; }
+.seg label:has(input[value=off]:checked) { background: var(--ink); color: var(--paper); }
+.seg label:has(input[value=soft]:checked) { background: var(--warn); color: var(--on-state); }
+.seg label:has(input[value=hard]:checked) { background: var(--new); color: var(--on-state); }
+.field { padding: 14px 0 4px; }
+.field input[type=number] { background: var(--sheet); border: 1px solid var(--ink-3); border-radius: 0; padding: 7px 10px; min-height: 38px; width: 110px; }
+.dlg-error { color: var(--new); font-weight: 600; font-size: 14px; margin: 8px 0 0; min-height: 1.3em; }
+.dlg-foot { padding: 12px 22px 20px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--hair); }
+@media (max-width: 600px) { .rule { grid-template-columns: 1fr; } .seg { justify-self: start; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>Ofertas de empleo</h1>
-      <p class="sub" id="sub">Cargando…</p>
-    </div>
-    <div class="run-box">
-      <div class="run-note" id="next"></div>
-      <button class="secondary" id="open-settings" aria-haspopup="dialog">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h3M9 12h5"/><circle cx="11" cy="4" r="2"/><circle cx="7" cy="12" r="2"/></svg>
-        Ajustes
-      </button>
-      <button class="primary" id="run"><span class="spin"></span><span id="run-label">Buscar ahora</span></button>
-    </div>
-  </header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-down" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></symbol>
+  <symbol id="i-out" viewBox="0 0 16 16"><path d="M9 3h4v4M13 3 7.5 8.5M11 9.5V13H3V5h3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 16 16"><path d="M2 4h7M13 4h1M2 12h3M9 12h5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="9" y="2" width="3" height="4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="5" y="10" width="3" height="4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m10.5 10.5 3.5 3.5" stroke="currentColor" stroke-width="1.8"/></symbol>
+</svg>
 
-  <div class="filters" role="group" aria-label="Filtros">
-    <input type="search" id="q" placeholder="Buscar puesto, empresa o ubicación…" aria-label="Buscar">
-    <button class="chip" id="only-new" aria-pressed="false"><span class="dot"></span>Solo nuevas <span class="n" id="new-n"></span></button>
-    <button class="chip" id="match-prefs" aria-pressed="true">Cumplen mis ajustes</button>
-    <button class="chip" data-fit="high" aria-pressed="true"><span class="swatch" style="background:var(--fit-high)"></span>Alto</button>
-    <button class="chip" data-fit="medium" aria-pressed="true"><span class="swatch" style="background:var(--fit-medium)"></span>Medio</button>
-    <button class="chip" data-fit="low" aria-pressed="true"><span class="swatch" style="background:var(--fit-low)"></span>Bajo</button>
-    <select id="state" aria-label="Estado">
-      <option value="open">Pendientes</option>
-      <option value="all">Todas</option>
-      <option value="closed">Descartadas / caducadas</option>
-    </select>
-    <select id="portal" aria-label="Portal"><option value="">Todos los portales</option></select>
+<header class="band">
+  <div class="band-in">
+    <h1>Ofertas de empleo</h1>
+    <nav class="tabs" aria-label="Vista">
+      <button type="button" data-view="open" aria-pressed="true">Pendientes<span class="n" id="n-open"></span></button>
+      <button type="button" data-view="all" aria-pressed="false">Todas</button>
+      <button type="button" data-view="closed" aria-pressed="false">Descartadas</button>
+    </nav>
+    <div class="meta" id="meta">Cargando…</div>
+    <div class="band-actions">
+      <button class="btn ghost" id="open-settings" aria-haspopup="dialog"><svg class="icon"><use href="#i-sliders"/></svg>Requisitos</button>
+      <button class="btn" id="run"><span class="spin"></span><svg class="icon"><use href="#i-search"/></svg><span id="run-label">Buscar<span class="lbl-l"> ahora</span></span></button>
+    </div>
   </div>
-  <p class="prefs" id="prefs"></p>
+</header>
 
-  <section class="kpis" id="kpis"></section>
+<div class="wrap">
+  <div class="filters" role="group" aria-label="Filtros">
+    <input type="search" id="q" placeholder="Buscar puesto, empresa o lugar" aria-label="Buscar">
+    <div class="chips">
+    <button class="tog" id="match-prefs" aria-pressed="true">Cumplen mis requisitos</button>
+    <button class="tog" data-fit="high" aria-pressed="true"><span class="sw" style="background:var(--fit-high)"></span>Alto</button>
+    <button class="tog" data-fit="medium" aria-pressed="true"><span class="sw" style="background:var(--fit-medium)"></span>Medio</button>
+    <button class="tog" data-fit="low" aria-pressed="true"><span class="sw" style="background:var(--fit-low)"></span>Bajo</button>
+    <select id="portal" aria-label="Portal"><option value="">Todos los portales</option></select>
+    <select id="order" aria-label="Orden">
+      <option value="day">Agrupadas por día</option>
+      <option value="score">Por puntuación</option>
+    </select>
+    </div>
+  </div>
 
-  <section class="charts">
-    <div class="card">
-      <h2>Ofertas por encaje</h2>
-      <p class="desc">Cuántas ofertas filtradas hay en cada nivel de encaje con tu CV.</p>
-      <div id="c-fit"></div>
-    </div>
-    <div class="card">
-      <h2>Publicadas por día</h2>
-      <p class="desc">Fecha de publicación de la oferta, últimos 21 días.</p>
-      <div class="legend">
-        <span><i class="swatch" style="background:var(--fit-high)"></i>Alto</span>
-        <span><i class="swatch" style="background:var(--fit-medium)"></i>Medio</span>
-        <span><i class="swatch" style="background:var(--fit-low)"></i>Bajo</span>
-      </div>
-      <div id="c-days"></div>
-    </div>
-    <div class="card">
-      <h2>Dónde están</h2>
-      <p class="desc">Ofertas por comunidad autónoma (las 8 con más).</p>
-      <div id="c-region"></div>
-    </div>
-    <div class="card">
-      <h2>Qué te frena</h2>
-      <p class="desc">Alertas más repetidas en las ofertas filtradas.</p>
-      <div id="c-flags"></div>
-    </div>
-  </section>
+  <div class="page">
+    <main id="main" aria-live="polite">
+      <div class="skel w1"></div><div class="skel w2"></div><div class="skel w3"></div><div class="skel w2"></div>
+    </main>
 
-  <section class="card tbl-card">
-    <div class="tbl-head">
-      <div><h2>Ofertas</h2><p class="desc" id="count" style="margin:0"></p></div>
-      <span class="status">Pulsa una fila para ver el detalle</span>
-    </div>
-    <div class="tbl-scroll">
-      <table>
-        <thead><tr>
-          <th data-sort="score" aria-sort="descending">Puntuación</th>
-          <th data-sort="title">Puesto</th>
-          <th data-sort="region">Ubicación</th>
-          <th data-sort="posted">Publicada</th>
-          <th data-sort="fit">Encaje</th>
-          <th>Alertas</th>
-          <th>Oferta</th>
-        </tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:16px">
-    <h2>Últimas búsquedas</h2>
-    <p class="desc">Automáticas cada día a las 13:00 (hora de Madrid) y las que lances con el botón.</p>
-    <ul class="runs" id="runs"></ul>
-  </section>
+    <aside class="rail" aria-label="Resumen">
+      <section>
+        <h2>Tus requisitos</h2>
+        <div id="reqs"></div>
+        <div class="tally"><b id="tally-n">—</b><span id="tally-t"></span></div>
+        <div class="tally-note" id="tally-note"></div>
+        <button class="btn ghost" id="prefs-edit">Cambiar requisitos</button>
+      </section>
+      <section>
+        <h2>Por qué se quedan fuera</h2>
+        <p class="desc">Motivos en las pendientes, descartadas o penalizadas.</p>
+        <div id="c-flags"></div>
+      </section>
+      <section>
+        <h2>Encaje</h2>
+        <p class="desc">Ofertas de la vista actual por nivel de encaje.</p>
+        <div id="c-fit"></div>
+      </section>
+      <section>
+        <h2>Publicadas por día</h2>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--fit-high)"></i>Alto</span>
+          <span><i class="sw" style="background:var(--fit-medium)"></i>Medio</span>
+          <span><i class="sw" style="background:var(--fit-low)"></i>Bajo</span>
+        </div>
+        <div id="c-days"></div>
+      </section>
+      <section>
+        <h2>Dónde están</h2>
+        <div id="c-region"></div>
+      </section>
+      <section>
+        <h2>Últimas búsquedas</h2>
+        <p class="desc">Automática cada día a las 13:00 (Madrid) y las que lances tú.</p>
+        <ul class="runs" id="runs"></ul>
+      </section>
+    </aside>
+  </div>
 </div>
+
 <dialog id="settings" aria-labelledby="dlg-title">
   <form id="settings-form">
     <div class="dlg-head">
-      <h2 id="dlg-title">Ajustes de búsqueda</h2>
-      <p class="desc" style="margin:0">Filtran ya la lista de ofertas y, desde la próxima búsqueda, también cuentan en la puntuación.</p>
+      <h2 id="dlg-title">Requisitos de las ofertas</h2>
+      <p>Para cada requisito: <strong>No filtrar</strong> lo ignora, <strong>Penalizar</strong> resta puntos y deja la oferta a la vista, <strong>Descartar</strong> la oculta. Se aplica al momento a todas las ofertas, también a las ya encontradas.</p>
+      <div class="presets" role="group" aria-label="Nivel general">
+        <span class="lab">Nivel general</span>
+        <button type="button" data-preset="flexible">Flexible</button>
+        <button type="button" data-preset="balanced">Equilibrado</button>
+        <button type="button" data-preset="strict">Estricto</button>
+        <span class="preset-note" id="preset-note"></span>
+      </div>
     </div>
     <div class="dlg-body">
-      <div class="field">
-        <label class="lab" for="f-salary">Salario mínimo (bruto anual, €)</label>
-        <input type="number" id="f-salary" min="0" max="300000" step="500" required inputmode="numeric">
-        <div class="help">Las ofertas que indican un salario por debajo se descartan.</div>
-      </div>
-      <div class="field">
-        <label class="lab" for="f-loc">Ubicación</label>
-        <input type="text" id="f-loc" placeholder="Canarias, Las Palmas, Tenerife" autocomplete="off">
-        <div class="help">Separadas por comas. Las ofertas en estas zonas puntúan más; la primera se usa para la búsqueda local en LinkedIn.</div>
-      </div>
-      <fieldset>
-        <legend>Tipo de trabajo que aceptas</legend>
-        <div class="opts">
-          <label class="opt"><input type="checkbox" name="mode" value="presencial"> Presencial</label>
-          <label class="opt"><input type="checkbox" name="mode" value="hibrido"> Semipresencial</label>
-          <label class="opt"><input type="checkbox" name="mode" value="remoto"> Teletrabajo</label>
+      <h3 class="grp">Experiencia y nivel</h3>
+      <div class="rule" data-rule="years">
+        <div class="rule-main">
+          <label class="lab" for="f-years">Experiencia exigida: como máximo
+            <input type="number" id="f-years" class="inline-num" min="0" max="20" step="1" required inputmode="numeric" autofocus> años</label>
+          <div class="help">Si la oferta pide más años, se aplica la regla. Las que no dicen nada pasan siempre.</div>
         </div>
-        <div class="help">Si una oferta no dice nada, cuenta como presencial.</div>
-      </fieldset>
-      <fieldset>
-        <legend>Dónde aceptas presencial o semipresencial</legend>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="scope" value="spain"> En toda España</label>
-          <label class="opt"><input type="radio" name="scope" value="local"> Solo en mi ubicación</label>
+      </div>
+      <div class="rule" data-rule="senior">
+        <div class="rule-main"><span class="lab">Puesto senior, lead, jefe o arquitecto</span><div class="help">Según el título de la oferta.</div></div>
+      </div>
+
+      <h3 class="grp">Idiomas</h3>
+      <div class="rule" data-rule="english">
+        <div class="rule-main"><span class="lab">Piden inglés alto (B2 o más, fluido…)</span></div>
+      </div>
+      <div class="rule" data-rule="other_lang">
+        <div class="rule-main"><span class="lab">Exigen otro idioma (alemán, francés, portugués…)</span></div>
+      </div>
+
+      <h3 class="grp">Salario</h3>
+      <div class="rule" data-rule="salary">
+        <div class="rule-main">
+          <label class="lab" for="f-salary">Salario indicado por debajo de
+            <input type="number" id="f-salary" class="inline-num wide" min="0" max="300000" step="500" required inputmode="numeric"> € brutos/año</label>
+          <div class="help">Cuenta el máximo de la horquilla: 22.000–32.000 € no baja de 26.000 €.</div>
         </div>
-      </fieldset>
+      </div>
+      <div class="rule" data-rule="salary_unknown">
+        <div class="rule-main"><span class="lab">La oferta no indica salario</span></div>
+      </div>
+
+      <h3 class="grp">Modalidad y ubicación</h3>
+      <div class="rule" data-rule="mode">
+        <div class="rule-main">
+          <span class="lab" id="lab-mode">Modalidad que aceptas</span>
+          <div class="opts" role="group" aria-labelledby="lab-mode">
+            <label class="opt"><input type="checkbox" name="mode" value="presencial"> Presencial</label>
+            <label class="opt"><input type="checkbox" name="mode" value="hibrido"> Semipresencial</label>
+            <label class="opt"><input type="checkbox" name="mode" value="remoto"> Teletrabajo</label>
+          </div>
+          <div class="help">Se aplica a las ofertas de otra modalidad. Si una oferta no dice nada, cuenta como presencial.</div>
+        </div>
+      </div>
+      <div class="rule" data-rule="zone">
+        <div class="rule-main">
+          <label class="lab" for="f-loc">Tu zona</label>
+          <input type="text" id="f-loc" placeholder="Canarias, Las Palmas, Tenerife" autocomplete="off">
+          <div class="opts" role="radiogroup" aria-label="Dónde aceptas presencial o semipresencial">
+            <label class="opt"><input type="radio" name="scope" value="spain"> Presencial en toda España</label>
+            <label class="opt"><input type="radio" name="scope" value="local"> Presencial solo en mi zona</label>
+          </div>
+          <div class="help">Separadas por comas; las ofertas en tu zona puntúan más. La regla solo actúa con «solo en mi zona», sobre ofertas presenciales o semipresenciales de fuera.</div>
+        </div>
+      </div>
+      <div class="rule" data-rule="abroad">
+        <div class="rule-main"><span class="lab">Ofertas fuera de España</span></div>
+      </div>
+
+      <h3 class="grp">Portales</h3>
       <div class="field">
-        <label class="lab" for="f-excl">Palabras que descartan un puesto</label>
-        <input type="text" id="f-excl" placeholder="prácticas, becario" autocomplete="off">
-        <div class="help">Separadas por comas. Se buscan en el título de la oferta.</div>
+        <span class="lab" id="lab-portals">De dónde vienen las ofertas</span>
+        <div class="opts" role="group" aria-labelledby="lab-portals">
+          <label class="opt"><input type="checkbox" name="portal" value="linkedin-search"> LinkedIn</label>
+          <label class="opt"><input type="checkbox" name="portal" value="freehire-search"> freehire</label>
+        </div>
+        <div class="help">Solo se busca en los portales marcados, y las ofertas ya encontradas en los demás se ocultan. Marca solo LinkedIn para quedarte únicamente con sus ofertas.</div>
+      </div>
+
+      <h3 class="grp">Palabras clave</h3>
+      <div class="rule" data-rule="require">
+        <div class="rule-main">
+          <label class="lab" for="f-req">La oferta debe mencionar alguna de</label>
+          <input type="text" id="f-req" placeholder="Odoo, Python" autocomplete="off">
+          <div class="help">Separadas por comas. Se buscan en el título y la descripción.</div>
+        </div>
+      </div>
+      <div class="rule" data-rule="exclude">
+        <div class="rule-main">
+          <label class="lab" for="f-excl">Palabras que descartan un puesto</label>
+          <input type="text" id="f-excl" placeholder="prácticas, becario" autocomplete="off">
+          <div class="help">Separadas por comas. Se buscan en el título.</div>
+        </div>
+      </div>
+
+      <h3 class="grp">Otros</h3>
+      <div class="rule" data-rule="age">
+        <div class="rule-main">
+          <label class="lab" for="f-age">Publicada hace más de
+            <input type="number" id="f-age" class="inline-num" min="0" max="365" step="1" required inputmode="numeric"> días</label>
+          <div class="help">0 = sin límite.</div>
+        </div>
       </div>
       <div class="field">
-        <label class="opt"><input type="checkbox" id="f-eng"> Bajar la puntuación si piden inglés alto</label>
+        <label class="lab" for="f-minscore">Puntuación mínima para mostrar una oferta</label>
+        <input type="number" id="f-minscore" min="0" max="100" step="5" required inputmode="numeric">
+        <div class="help">0 = todas. Penalizar resta puntos de la puntuación automática; en las ofertas ya evaluadas con /rank solo añade la alerta.</div>
       </div>
       <p class="dlg-error" id="dlg-error" role="alert"></p>
     </div>
     <div class="dlg-foot">
-      <button type="button" class="secondary" id="dlg-cancel">Cancelar</button>
-      <button type="submit" class="primary" id="dlg-save">Guardar</button>
+      <button type="button" class="btn ghost" id="dlg-cancel">Cancelar</button>
+      <button type="submit" class="btn" id="dlg-save">Guardar requisitos</button>
     </div>
   </form>
 </dialog>
@@ -366,9 +547,10 @@ const REGIONS = [
   [/spain|espa[nñ]a|^es$/i, "España (sin concretar)"],
 ];
 const MODE_LABEL = { presencial: "Presencial", hibrido: "Semipresencial", remoto: "Teletrabajo" };
+const PORTAL_LABEL = { "linkedin-search": "LinkedIn", "freehire-search": "freehire" };
+const LEVEL_LABEL = { off: "no filtra", soft: "penaliza", hard: "descarta" };
 let DATA = { jobs: [], runs: [], running: false, settings: null };
-let sort = { key: "score", dir: -1 };
-let onlyNew = false;
+let view = "open";
 let matchPrefs = true;
 let openRow = null;
 let pollTimer = null;
@@ -376,23 +558,51 @@ let pollTimer = null;
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const safeUrl = (u) => /^https?:\/\//i.test(u || "") ? u : null;
+const icon = (id) => `<svg class="icon" aria-hidden="true"><use href="#i-${id}"/></svg>`;
 function region(loc) {
   if (!loc) return "Sin ubicación";
   for (const [re, name] of REGIONS) if (re.test(loc)) return name;
   return "Fuera de España";
 }
-const scoreOf = (j) => j.rank_score ?? j.auto_score ?? null;
-const flagsOf = (j) => j.auto_flags || [];
-const fmtDate = (d) => d ? new Date(d + "T12:00:00").toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) : "—";
-const fmtWhen = (iso) => iso ? new Date(iso).toLocaleString("es-ES", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "—";
-function flagClass(f) {
-  if (/⚠|fuera de|modalidad no deseada|excluida/.test(f)) return "flag bad";
-  if (/pide|senior|baja de|< \d/.test(f)) return "flag warn";
-  if (/remoto|canarias|en tu zona|salario \d/i.test(f)) return "flag good";
-  return "flag";
+// j.eval is computed by the server from the current requirements (tools/job_rules.py).
+const scoreOf = (j) => j.eval?.score ?? j.rank_score ?? j.auto_score ?? null;
+const fitOf = (j) => j.eval?.fit || j.fit;
+const flagsOf = (j) => j.eval?.flags || j.auto_flags || [];
+const issues = (j) => j.eval?.excluded || [];
+const fmtDate = (d) => d ? new Date(d + "T12:00:00").toLocaleDateString("es-ES", { day: "numeric", month: "short" }) : "sin fecha";
+// Run stamps: new ones carry their offset; older ones are naive server-local time.
+const TZ = "Europe/Madrid";
+function parseTs(iso) {
+  if (/[zZ]|[+-]\d\d:\d\d$/.test(iso)) return new Date(iso);
+  const off = DATA.utc_offset_min || 0, sign = off < 0 ? "-" : "+", a = Math.abs(off);
+  return new Date(`${iso}${sign}${String(Math.floor(a / 60)).padStart(2, "0")}:${String(a % 60).padStart(2, "0")}`);
 }
-const fold = (s) => String(s ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+const fmtWhen = (iso) => iso ? parseTs(iso).toLocaleString("es-ES", { timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "—";
+const fmtTime = (iso) => parseTs(iso).toLocaleTimeString("es-ES", { timeZone: TZ, hour: "2-digit", minute: "2-digit" });
+const madridDay = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(d);
+const runIsToday = (r) => !!r && madridDay(parseTs(r.started)) === madridDay(new Date());
 const fmtEur = (n) => n.toLocaleString("es-ES") + " €";
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+function daysAgo(d) {
+  if (!d) return null;
+  const t = new Date(); t.setHours(12, 0, 0, 0);
+  return Math.round((t - new Date(d + "T12:00:00")) / 864e5);
+}
+function ageText(d) {
+  const n = daysAgo(d);
+  if (n == null) return "";
+  return n <= 0 ? "hoy" : n === 1 ? "ayer" : `hace ${n} días`;
+}
+function alertClass(f, j) {
+  if (issues(j).includes(f)) return "bad";
+  if ((j.eval?.soft || []).includes(f) || /⚠|baja de/.test(f)) return "warn";
+  if (/remoto|en tu zona|salario \d/i.test(f)) return "good";
+  return "plain";
+}
+// "salario no indicado" is noise unless a rule acts on it
+const shownFlags = (j) => flagsOf(j).filter((f) => f !== "salario no indicado" || DATA.settings?.rules.salary_unknown !== "off");
+// the server marks language alerts with a warning sign; colour carries that here
+const label = (f) => f.replace(/^⚠\s*/, "");
 
 // ---------- new since the previous run ----------
 // Each run stamps its postings with found_in_run = its "started"; the latest
@@ -405,50 +615,30 @@ function isNew(j) {
   const r = lastRun();
   return !!r && j.found_in_run === r.started;
 }
-
-// ---------- settings check (also covers postings scored before a change) ----------
 function modeOf(j) {
+  if (j.facts?.work_mode) return j.facts.work_mode;
   if (j.work_mode) return j.work_mode;
   const f = flagsOf(j);
   return f.includes("remoto") ? "remoto" : f.includes("híbrido") ? "hibrido" : "presencial";
 }
-function salaryMaxOf(j) {
-  if (j.salary_max != null) return j.salary_max;
-  for (const f of flagsOf(j)) { const m = /^salario [\d.]+–([\d.]+)/.exec(f); if (m) return +m[1].replace(/\./g, ""); }
-  return null;
-}
-function prefIssues(j) {
-  const s = DATA.settings;
-  if (!s) return [];
-  const out = [];
-  const mode = modeOf(j);
-  const max = salaryMaxOf(j);
-  const local = s.locations.some((l) => fold(`${j.location || ""} ${j.title || ""}`).includes(fold(l)));
-  const excluded = s.exclude_keywords.find((k) => fold(j.title).includes(fold(k)));
-  if (!s.work_modes.includes(mode)) out.push(`modalidad no deseada (${MODE_LABEL[mode].toLowerCase()})`);
-  else if (s.scope === "local" && mode !== "remoto" && !local) out.push("fuera de tu zona");
-  if (max != null && max < s.min_salary) out.push(`salario < ${fmtEur(s.min_salary)}`);
-  if (excluded) out.push(`excluida por «${excluded}»`);
-  return out;
+function inView(j) {
+  const open = OPEN.has(j.status);
+  return view === "all" || (view === "open" ? open : !open);
 }
 
 function filtered() {
   const q = $("#q").value.trim().toLowerCase();
-  const fits = new Set([...document.querySelectorAll(".chip[data-fit]")].filter((b) => b.getAttribute("aria-pressed") === "true").map((b) => b.dataset.fit));
-  const st = $("#state").value;
+  const fits = new Set([...document.querySelectorAll(".tog[data-fit]")].filter((b) => b.getAttribute("aria-pressed") === "true").map((b) => b.dataset.fit));
   const portal = $("#portal").value;
   return DATA.jobs.filter((j) => {
-    if (!fits.has(j.fit)) return false;
-    const open = OPEN.has(j.status);
-    if (st === "open" && !open) return false;
-    if (st === "closed" && open) return false;
+    if (!inView(j) || !fits.has(fitOf(j))) return false;
     if (portal && j.portal !== portal) return false;
     if (q && ![j.title, j.company, j.location, region(j.location)].join(" ").toLowerCase().includes(q)) return false;
-    if (onlyNew && !isNew(j)) return false;
-    if (matchPrefs && prefIssues(j).length) return false;
+    if (matchPrefs && issues(j).length) return false;
     return true;
   });
 }
+const byScore = (a, b) => (scoreOf(b) ?? -1) - (scoreOf(a) ?? -1);
 
 // ---------- tooltip ----------
 const tip = $("#tip");
@@ -464,223 +654,258 @@ function bindTip(el, html) {
   el.addEventListener("mouseleave", () => { tip.style.display = "none"; });
 }
 
-// ---------- charts ----------
-function hbars(target, rows, colorFn) {
-  const el = $(target);
-  el.innerHTML = "";
-  if (!rows.length || rows.every((r) => !r.value)) { el.innerHTML = '<div class="empty">Sin datos con estos filtros.</div>'; return; }
-  const max = Math.max(...rows.map((r) => r.value), 1);
-  const grid = document.createElement("div");
-  grid.className = "hbars";
-  for (const r of rows) {
-    const lab = document.createElement("div");
-    lab.className = "lab"; lab.textContent = r.label; lab.title = r.label;
-    const track = document.createElement("div");
-    track.className = "track";
-    track.innerHTML = `<div class="bar" style="width:calc(${(r.value / max) * 100}% - 34px);background:${colorFn(r)}"></div><span class="val">${r.value}</span>`;
-    bindTip(track, `<strong>${esc(r.label)}</strong><br>${r.value} oferta${r.value === 1 ? "" : "s"}${r.extra ? "<br>" + r.extra : ""}`);
-    grid.append(lab, track);
+// ---------- featured ad + classified list ----------
+const cvHref = (j) => `/api/cv/${encodeURIComponent(j.key)}.pdf`;
+function marks(j) {
+  let m = "";
+  if (isNew(j)) m += '<span class="mark new" title="Encontrada en la última búsqueda">Nueva</span>';
+  if (j.status === "ranked") m += '<span class="mark ranked" title="Evaluada a fondo con /rank">Evaluada</span>';
+  if (j.status === "skipped") m += '<span class="mark skipped">Descartada</span>';
+  if (j.status === "expired" || j.status === "unreachable") m += `<span class="mark expired">${esc(STATUS[j.status])}</span>`;
+  if (issues(j).length) m += '<span class="mark out" title="No cumple algún requisito en «Descartar»">No cumple</span>';
+  else if ((j.eval?.soft || []).length) m += '<span class="mark pen" title="Pierde puntos por un requisito en «Penalizar»">Penalizada</span>';
+  return m;
+}
+function featuredHtml(j) {
+  const s = scoreOf(j), url = safeUrl(j.url);
+  const facts = [MODE_LABEL[modeOf(j)], ...shownFlags(j).filter((f) => !/^(remoto|híbrido)$/.test(f)), j.posted_date ? `Publicada ${fmtDate(j.posted_date)}` : null].filter(Boolean);
+  const why = isNew(j) ? "La mejor puntuación de la última búsqueda." : "Sigue siendo la mejor de esta vista: la última búsqueda no trajo ninguna de encaje alto.";
+  return `<article class="feat" data-key="${esc(j.key)}">
+    <div class="score cond" aria-label="Puntuación ${s ?? "sin dato"} de 100">${s ?? "—"}<small>de 100 · encaje ${esc((FIT[fitOf(j)] || "—").toLowerCase())}</small></div>
+    <div>
+      <h2>${esc(j.title)}</h2>
+      <div class="co">${esc(j.company)}${j.location ? " · " + esc(j.location) : ""}</div>
+      ${j.rank_verdict ? `<p><strong>${esc(j.rank_verdict)}.</strong> ${esc((j.strengths || []).slice(0, 2).join(". "))}</p>` : j.snippet ? `<p>${esc(j.snippet.slice(0, 260))}${j.snippet.length > 260 ? "…" : ""}</p>` : ""}
+      <div class="facts">${marks(j) ? `<span>${marks(j)}</span>` : ""}${facts.map((f) => `<span class="${alertClass(f, j)}">${esc(label(f)[0].toUpperCase() + label(f).slice(1))}</span>`).join("")}</div>
+    </div>
+    <div class="acts">
+      <a class="btn" href="${cvHref(j)}" target="_blank" rel="noopener">${icon("down")}Descargar CV ATS</a>
+      ${url ? `<a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${icon("out")}Abrir oferta</a>` : ""}
+      <div class="why">${why}</div>
+    </div>
+  </article>`;
+}
+function detailHtml(j) {
+  const list = (title, items) => items && items.length ? `<h4>${title}</h4><ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
+  const k = j.keywords || { matched: [], missing: [] };
+  return `<div class="detail" id="d-${esc(j.key)}">
+    ${j.rank_verdict ? `<p><strong>Evaluación:</strong> ${esc(j.rank_verdict)} (${esc(j.rank_score)}/100, ${esc(j.rank_date || "")})</p>` : ""}
+    ${j.snippet ? `<p>${esc(j.snippet)}${j.snippet.length >= 600 ? "…" : ""}</p>` : "<p>Sin extracto de la descripción.</p>"}
+    ${list("Puntos fuertes", j.strengths)}${list("Carencias", j.gaps)}
+    ${issues(j).length ? `<h4>No cumple</h4><p>${esc(issues(j).join(" · "))}</p>` : ""}
+    <h4>CV ATS para esta oferta</h4>
+    <div>Pide y tienes (se destaca en el CV):</div>
+    <div class="kw have">${k.matched.length ? k.matched.map((x) => `<span>${esc(x)}</span>`).join("") : '<span>ninguna palabra clave reconocida</span>'}</div>
+    ${k.missing.length ? `<div style="margin-top:8px">Pide y no tienes (no se añade):</div><div class="kw miss">${k.missing.map((x) => `<span>${esc(x)}</span>`).join("")}</div>` : ""}
+    <a class="btn" href="${cvHref(j)}" target="_blank" rel="noopener">${icon("down")}Descargar CV ATS</a>
+    <div class="foot">Modalidad: ${esc(MODE_LABEL[modeOf(j)])}${j.facts || j.work_mode ? "" : " (estimada)"} · ${esc(STATUS[j.status] || j.status)} · portal ${esc(j.portal || "—")} · vista por primera vez ${esc(j.found_in_run ? fmtWhen(j.found_in_run) : j.first_seen || "—")}</div>
+  </div>`;
+}
+function adHtml(j) {
+  const s = scoreOf(j), url = safeUrl(j.url), isOpen = openRow === j.key;
+  const where = [j.company, j.location && region(j.location) !== "Fuera de España" ? (j.location.split(",")[0]) : j.location].filter(Boolean).join(", ");
+  const alerts = shownFlags(j).filter((f) => !/^(remoto|híbrido)$/.test(f));
+  const t = String(j.title || ""), cut = t.indexOf(" "), first = cut < 0 ? t : t.slice(0, cut), rest = cut < 0 ? "" : t.slice(cut);
+  return `<li class="ad${isOpen ? " open" : ""}" data-key="${esc(j.key)}">
+    <div class="ad-row">
+      <div class="n cond">${s ?? "—"}<small>${esc(FIT[fitOf(j)] || "")}</small></div>
+      <div class="txt"><button class="lead" aria-expanded="${isOpen}" aria-controls="d-${esc(j.key)}"><span class="nw">${marks(j)}${esc(first)}</span>${esc(rest)}.</button>
+        ${esc(where)}.${alerts.length ? " " + alerts.map((f) => `<span class="al ${alertClass(f, j)}">${esc(label(f))}</span>`).join(" · ") : ""}</div>
+      <div class="when">${esc(MODE_LABEL[modeOf(j)])}<small>${j.posted_date ? `${fmtDate(j.posted_date)}<span class="age"> · ${ageText(j.posted_date)}</span>` : "sin fecha"}</small></div>
+      <div class="acts"><a href="${cvHref(j)}" target="_blank" rel="noopener" title="Descargar un CV ATS adaptado a esta oferta">${icon("down")}CV ATS</a>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${icon("out")}Abrir</a>` : ""}</div>
+    </div>
+    ${detailHtml(j)}
+  </li>`;
+}
+function sectionHtml(title, note, jobs) {
+  return `<div class="sect"><h2>${esc(title)}</h2><span>${esc(note)}</span></div><ul class="ads${openRow && jobs.some((j) => j.key === openRow) ? " focus" : ""}">${jobs.map(adHtml).join("")}</ul>`;
+}
+function emptyHtml(hidden) {
+  if (!DATA.jobs.length) return `<div class="empty"><strong>Todavía no hay ofertas</strong>La primera búsqueda trae las ofertas de LinkedIn y freehire y las puntúa con tu CV. Tarda 2-4 minutos.<br><button class="btn" data-act="run">Buscar ahora</button></div>`;
+  return `<div class="empty"><strong>Ninguna oferta con estos filtros</strong>${hidden ? `${plural(hidden, "oferta de esta vista no cumple", "ofertas de esta vista no cumplen")} tus requisitos.` : "Prueba a quitar filtros o a cambiar de vista."}<br>
+    ${hidden ? '<button class="btn" data-act="show-hidden">Ver las que no cumplen</button>' : ""}<button class="btn ghost" data-act="settings">Cambiar requisitos</button></div>`;
+}
+function renderMain(jobs) {
+  const main = $("#main");
+  const hidden = matchPrefs ? DATA.jobs.filter((j) => inView(j) && issues(j).length).length : 0;
+  if (!jobs.length) { main.innerHTML = emptyHtml(hidden); return; }
+  const sorted = [...jobs].sort(byScore);
+  // The best new posting leads when it fits well; otherwise the best one still pending.
+  const fresh = sorted.filter(isNew);
+  const feat = fresh[0] && fitOf(fresh[0]) === "high" ? fresh[0] : sorted[0];
+  const rest = sorted.filter((j) => j !== feat);
+  let html = featuredHtml(feat);
+  if ($("#order").value === "score") {
+    html += sectionHtml("Por puntuación", plural(rest.length, "oferta", "ofertas"), rest);
+  } else {
+    const r = lastRun();
+    const today = rest.filter(isNew);
+    const head = runIsToday(r) ? "Hoy" : "Última búsqueda";
+    const when = r ? (runIsToday(r) ? `encontradas en la búsqueda de las ${fmtTime(r.started)}` : fmtWhen(r.started)) : "";
+    if (today.length) html += sectionHtml(head, `${when} · ${today.length}`, today);
+    else if (r) html += `<div class="sect"><h2>${head}</h2><span>${when}: no trajo más ofertas con estos filtros</span></div>`;
+    const groups = new Map();
+    for (const j of rest.filter((j) => !isNew(j)).sort((a, b) => (b.posted_date || "").localeCompare(a.posted_date || "") || byScore(a, b))) {
+      const d = j.posted_date || "";
+      if (!groups.has(d)) groups.set(d, []);
+      groups.get(d).push(j);
+    }
+    for (const [d, list] of groups) {
+      html += sectionHtml(d ? `Publicadas el ${fmtDate(d)}` : "Sin fecha", `${d ? ageText(d) + " · " : ""}${list.length}`, list.sort(byScore));
+    }
   }
-  el.append(grid);
+  if (hidden) html += `<p class="empty" style="padding-top:20px">${plural(hidden, "oferta más de esta vista queda oculta", "ofertas más de esta vista quedan ocultas")} porque no cumple${hidden === 1 ? "" : "n"} tus requisitos. <a href="#" data-act="show-hidden">Verlas</a></p>`;
+  main.innerHTML = html;
+}
+$("#main").addEventListener("click", (e) => {
+  const act = e.target.closest("[data-act]");
+  if (act) { e.preventDefault(); return action(act.dataset.act); }
+  if (e.target.closest("a")) return;
+  const row = e.target.closest(".ad-row");
+  if (!row) return;
+  const key = row.parentElement.dataset.key;
+  openRow = openRow === key ? null : key;
+  renderMain(filtered());
+  const btn = document.querySelector(`.ad[data-key="${CSS.escape(key)}"] .lead`);
+  if (btn) btn.focus({ preventScroll: true });
+});
+function action(a) {
+  if (a === "run") $("#run").click();
+  if (a === "settings") openSettings();
+  if (a === "show-hidden") setMatch(false);
 }
 
+// ---------- rail ----------
+// Counts set as agate: label, dot leader, figure - the listings-page way.
+function agate(target, rows, swatch) {
+  const el = $(target);
+  if (!rows.length || rows.every((r) => !r.value)) { el.innerHTML = '<div class="none">Nada que mostrar con estos filtros.</div>'; return; }
+  el.innerHTML = `<div class="agate">${rows.map((r) => `<div>${swatch ? `<span class="sw" style="background:${swatch(r)}"></span>` : ""}<span>${esc(r.label)}</span><i></i><b>${r.value}</b></div>`).join("")}</div>`;
+}
 function dayColumns(target, jobs) {
   const el = $(target);
   const days = [];
   const today = new Date(); today.setHours(12, 0, 0, 0);
   for (let i = 20; i >= 0; i--) { const d = new Date(today); d.setDate(d.getDate() - i); days.push(d.toISOString().slice(0, 10)); }
   const counts = Object.fromEntries(days.map((d) => [d, { high: 0, medium: 0, low: 0 }]));
-  for (const j of jobs) if (j.posted_date && counts[j.posted_date]) counts[j.posted_date][j.fit]++;
+  for (const j of jobs) if (j.posted_date && counts[j.posted_date]) counts[j.posted_date][fitOf(j)]++;
   const totals = days.map((d) => FIT_ORDER.reduce((s, f) => s + counts[d][f], 0));
   const max = Math.max(...totals);
-  if (!max) { el.innerHTML = '<div class="empty">Sin ofertas con fecha en los últimos 21 días.</div>'; return; }
+  if (!max) { el.innerHTML = '<div class="none">Sin ofertas con fecha en los últimos 21 días.</div>'; return; }
   const step = max <= 5 ? 1 : max <= 10 ? 2 : Math.ceil(max / 5);
   const top = Math.ceil(max / step) * step;
-  const W = 380, H = 190, L = 24, R = 4, T = 8, B = 22;
-  const pw = W - L - R, ph = H - T - B, slot = pw / days.length, bw = Math.min(16, slot - 4);
+  const W = 320, H = 150, L = 20, R = 2, T = 6, B = 20;
+  const pw = W - L - R, ph = H - T - B, slot = pw / days.length, bw = Math.max(4, slot - 3);
   const y = (v) => T + ph - (v / top) * ph;
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Ofertas publicadas por día y encaje">`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Ofertas publicadas por día y encaje, últimos 21 días">`;
   for (let v = 0; v <= top; v += step) {
-    svg += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? "var(--grid)" : "var(--axis)"}" stroke-width="1"/>`;
-    svg += `<text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+    svg += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${v ? "var(--hair)" : "var(--ink-3)"}" stroke-width="1"/>`;
+    svg += `<text x="${L - 5}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
   }
   days.forEach((d, i) => {
     const x = L + i * slot + (slot - bw) / 2;
     let base = 0;
-    const segs = FIT_ORDER.filter((f) => counts[d][f]);
-    segs.forEach((f, k) => {
+    FIT_ORDER.filter((f) => counts[d][f]).forEach((f, k) => {
       const v = counts[d][f];
-      const y0 = y(base), y1 = y(base + v);
-      const gap = k > 0 ? 2 : 0;           // 2px surface gap between stacked segments
-      const hgt = Math.max(1, y0 - y1 - gap);
-      const yy = y1;
-      const isTop = k === segs.length - 1;
-      const r = isTop ? Math.min(4, hgt) : 0;
-      svg += r
-        ? `<path d="M${x},${yy + hgt} V${yy + r} Q${x},${yy} ${x + r},${yy} H${x + bw - r} Q${x + bw},${yy} ${x + bw},${yy + r} V${yy + hgt} Z" fill="${FIT_VAR[f]}"/>`
-        : `<rect x="${x}" y="${yy}" width="${bw}" height="${hgt}" fill="${FIT_VAR[f]}"/>`;
+      const gap = k > 0 ? 1.5 : 0;
+      const hgt = Math.max(1, y(base) - y(base + v) - gap);
+      svg += `<rect x="${x}" y="${y(base + v)}" width="${bw}" height="${hgt}" fill="${FIT_VAR[f]}"/>`;
       base += v;
     });
     const last = i === days.length - 1;
-    if (i % 4 === 0 || last) svg += `<text x="${last ? W - R : L + i * slot + slot / 2}" y="${H - 6}" text-anchor="${last ? "end" : "middle"}">${fmtDate(d)}</text>`;
+    if (i % 7 === 0 || last) svg += `<text x="${last ? W - R : L + i * slot + slot / 2}" y="${H - 5}" text-anchor="${last ? "end" : "middle"}">${fmtDate(d)}</text>`;
     svg += `<rect class="hit" data-day="${d}" x="${L + i * slot}" y="${T}" width="${slot}" height="${ph}" fill="transparent"/>`;
   });
-  svg += "</svg>";
-  el.innerHTML = svg;
+  el.innerHTML = svg + "</svg>";
   el.querySelectorAll("rect.hit").forEach((h) => {
     const d = h.dataset.day, c = counts[d], t = FIT_ORDER.reduce((s, f) => s + c[f], 0);
-    bindTip(h, `<strong>${fmtDate(d)}</strong> · ${t} oferta${t === 1 ? "" : "s"}` +
-      FIT_ORDER.map((f) => `<br><span class="swatch" style="background:${FIT_VAR[f]}"></span> ${FIT[f]}: ${c[f]}`).join(""));
+    bindTip(h, `<strong>${fmtDate(d)}</strong> · ${plural(t, "oferta", "ofertas")}` + FIT_ORDER.map((f) => `<br>${FIT[f]}: ${c[f]}`).join(""));
   });
 }
+function reasonOf(f) {
+  return /^pide \d+\+ años/.test(f) ? "Piden más años" : f.includes("inglés") ? "Inglés alto" : f.startsWith("⚠ exige") ? "Otro idioma"
+    : f === "senior" ? "Puesto senior" : f === "salario no indicado" ? "Sin salario" : /< \d/.test(f) ? "Salario bajo"
+    : f === "fuera de España" ? "Fuera de España" : f.startsWith("modalidad no deseada") ? "Modalidad"
+    : f === "fuera de tu zona" ? "Fuera de tu zona" : f.startsWith("no menciona") ? "Sin palabras obligatorias"
+    : f.startsWith("portal no elegido") ? "Otro portal" : f.startsWith("excluida por") ? "Palabras excluidas" : f.startsWith("publicada hace") ? "Antiguas" : f.startsWith("puntuación <") ? "Puntuación baja" : null;
+}
+function renderRail(jobs) {
+  const s = DATA.settings;
+  const open = DATA.jobs.filter((j) => OPEN.has(j.status));
+  const pass = open.filter((j) => !issues(j).length);
+  if (s) {
+    const r = s.rules;
+    const rows = [
+      ["Experiencia", `máx. ${s.max_years} año${s.max_years === 1 ? "" : "s"}`, r.years],
+      ["Puesto senior", "", r.senior],
+      ["Inglés alto", "", r.english],
+      ["Salario", `mín. ${fmtEur(s.min_salary)}`, r.salary],
+      ["Modalidad", s.work_modes.length === 3 ? "todas" : s.work_modes.map((m) => MODE_LABEL[m].toLowerCase()).join(", "), r.mode],
+      ["Zona", s.scope === "local" ? "solo tu zona" : "toda España", s.scope === "local" ? r.zone : "off"],
+      ["Portales", s.portals.map((p) => PORTAL_LABEL[p] || p).join(", "), s.portals.length < Object.keys(PORTAL_LABEL).length ? "hard" : "off"],
+    ];
+    if (s.require_keywords.length) rows.push(["Debe mencionar", s.require_keywords.join(", "), r.require]);
+    if (s.exclude_keywords.length) rows.push(["Excluye", s.exclude_keywords.join(", "), r.exclude]);
+    $("#reqs").innerHTML = `<div class="req"><span>Nivel general</span><i>${esc(presetName(r))}</i></div>` +
+      rows.map(([a, b, lv]) => `<div class="req"><span>${esc(a)}${b ? ` <span style="color:var(--ink-3)">· ${esc(b)}</span>` : ""}</span><i class="${lv}">${LEVEL_LABEL[lv]}</i></div>`).join("");
+  }
+  $("#tally-n").textContent = pass.length;
+  $("#tally-t").textContent = `de ${open.length} pendientes cumplen`;
+  const why = {};
+  for (const j of open) for (const f of issues(j)) { const k = reasonOf(f); if (k) why[k] = (why[k] || 0) + 1; }
+  const top = Object.entries(why).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  $("#tally-note").textContent = open.length - pass.length ? `${open.length - pass.length} ocultas${top.length ? ": " + top.map(([k, v]) => `${k.toLowerCase()} ${v}`).join(", ") : ""}.` : "Ninguna oculta.";
 
-function renderCharts(jobs) {
-  hbars("#c-fit", FIT_ORDER.map((f) => ({ label: FIT[f], value: jobs.filter((j) => j.fit === f).length, fit: f })), (r) => FIT_VAR[r.fit]);
+  const byFlag = {};
+  for (const j of open) for (const f of [...issues(j), ...(j.eval?.soft || [])]) { const k = reasonOf(f); if (k) byFlag[k] = (byFlag[k] || 0) + 1; }
+  agate("#c-flags", Object.entries(byFlag).sort((a, b) => b[1] - a[1]).map(([label, value]) => ({ label, value })));
+  agate("#c-fit", FIT_ORDER.map((f) => ({ label: FIT[f], value: jobs.filter((j) => fitOf(j) === f).length, fit: f })), (r) => FIT_VAR[r.fit]);
   dayColumns("#c-days", jobs);
   const byRegion = {};
-  for (const j of jobs) { const r = region(j.location); byRegion[r] = (byRegion[r] || 0) + 1; }
+  for (const j of jobs) { const rg = region(j.location); byRegion[rg] = (byRegion[rg] || 0) + 1; }
   const regs = Object.entries(byRegion).sort((a, b) => b[1] - a[1]);
-  const topR = regs.slice(0, 8).map(([label, value]) => ({ label, value }));
-  const rest = regs.slice(8).reduce((s, [, v]) => s + v, 0);
-  if (rest) topR.push({ label: "Otras", value: rest });
-  hbars("#c-region", topR, () => "var(--series-1)");
-  const byFlag = {};
-  for (const j of jobs) for (const f of flagsOf(j)) {
-    const k = f.startsWith("pide") ? "Piden más años que los tuyos" : f.includes("inglés") ? "Inglés alto" : f.startsWith("⚠ exige") ? "Otro idioma obligatorio"
-      : f === "senior" ? "Puesto senior" : f === "salario no indicado" ? "Salario no indicado" : /baja de|< \d/.test(f) ? "Salario por debajo de tu mínimo"
-      : f === "fuera de España" ? "Fuera de España" : f.startsWith("modalidad no deseada") ? "Modalidad no deseada"
-      : f === "fuera de tu zona" ? "Fuera de tu zona" : null;
-    if (k) byFlag[k] = (byFlag[k] || 0) + 1;
-  }
-  hbars("#c-flags", Object.entries(byFlag).sort((a, b) => b[1] - a[1]).map(([label, value]) => ({ label, value })), () => "var(--series-1)");
-}
+  const topR = regs.slice(0, 7).map(([label, value]) => ({ label, value }));
+  const restR = regs.slice(7).reduce((t, [, v]) => t + v, 0);
+  if (restR) topR.push({ label: "Otras", value: restR });
+  agate("#c-region", topR);
 
-// ---------- KPIs ----------
-function renderKpis(jobs) {
-  const open = DATA.jobs.filter((j) => OPEN.has(j.status) && !(matchPrefs && prefIssues(j).length));
-  const last = lastRun();
-  const fresh = open.filter(isNew);
-  const tiles = [
-    { cls: "hero", label: "Encaje alto pendientes", value: open.filter((j) => j.fit === "high").length, hint: "Para mirar primero" },
-    { cls: "new-kpi", id: "kpi-new", label: "Nuevas en la última búsqueda", value: last ? fresh.length : "—",
-      hint: last ? `${fresh.filter((j) => j.fit === "high").length} de encaje alto · ${fmtWhen(last.started)} · pulsa para ${onlyNew ? "ver todas" : "verlas"}` : "Aún no hay búsquedas" },
-    { label: "Pendientes", value: open.length, hint: `${open.filter((j) => j.fit === "medium").length} de encaje medio` },
-    { label: "Ofertas vistas", value: DATA.jobs.length, hint: `${jobs.length} con los filtros actuales` },
-  ];
-  $("#kpis").innerHTML = tiles.map((t) => {
-    const inner = `<div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}</div><div class="hint">${esc(t.hint)}</div>`;
-    return t.id
-      ? `<button type="button" class="card kpi clickable ${t.cls}" id="${t.id}" aria-pressed="${onlyNew}">${inner}</button>`
-      : `<div class="card kpi ${t.cls || ""}">${inner}</div>`;
-  }).join("");
-  $("#kpi-new").addEventListener("click", () => setOnlyNew(!onlyNew));
-}
-
-function renderPrefs() {
-  const s = DATA.settings;
-  if (!s) { $("#prefs").textContent = ""; return; }
-  const parts = [
-    `mínimo ${fmtEur(s.min_salary)}`,
-    s.work_modes.map((m) => MODE_LABEL[m].toLowerCase()).join(", "),
-    s.locations.length ? `${s.locations.join(", ")}${s.scope === "local" ? " (solo tu zona)" : ""}` : "sin ubicación",
-  ];
-  if (s.exclude_keywords.length) parts.push(`sin «${s.exclude_keywords.join("», «")}»`);
-  $("#prefs").innerHTML = `Tus ajustes: ${esc(parts.join(" · "))} · <button type="button" id="prefs-edit">Cambiar</button>`;
-  $("#prefs-edit").addEventListener("click", openSettings);
-}
-
-function setOnlyNew(v) {
-  onlyNew = v;
-  $("#only-new").setAttribute("aria-pressed", String(v));
-  render();
-}
-
-// ---------- table ----------
-function renderTable(jobs) {
-  const fitRank = { high: 0, medium: 1, low: 2 };
-  const val = {
-    score: (j) => scoreOf(j) ?? -1,
-    title: (j) => (j.title || "").toLowerCase(),
-    region: (j) => region(j.location),
-    posted: (j) => j.posted_date || "",
-    fit: (j) => -fitRank[j.fit],
-  }[sort.key];
-  const rows = [...jobs].sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * sort.dir);
-  const hidden = matchPrefs ? DATA.jobs.filter((j) => prefIssues(j).length).length : 0;
-  $("#count").textContent = `${rows.length} oferta${rows.length === 1 ? "" : "s"}` +
-    (hidden ? ` · ${hidden} oculta${hidden === 1 ? "" : "s"} porque no cumplen tus ajustes` : "");
-  const tb = $("#rows");
-  if (!rows.length) {
-    tb.innerHTML = `<tr><td colspan="7" class="empty">${onlyNew ? "La última búsqueda no trajo ofertas nuevas con estos filtros." : "No hay ofertas con estos filtros."}</td></tr>`;
-    return;
-  }
-  tb.innerHTML = rows.map((j) => {
-    const s = scoreOf(j), url = safeUrl(j.url), fresh = isNew(j);
-    const own = flagsOf(j).filter((f) => f !== "salario no indicado");
-    const extra = prefIssues(j).filter((f) => !own.includes(f) && !(f.startsWith("salario <") && own.some((o) => /< \d/.test(o))));
-    const flags = [...own, ...extra];
-    return `<tr class="row${fresh ? " is-new" : ""}" data-key="${esc(j.key)}">
-      <td class="num"><div class="meter"><div class="m"><i style="width:${s ?? 0}%;background:${FIT_VAR[j.fit]}"></i></div>${s ?? "—"}</div></td>
-      <td><div class="title">${fresh ? '<span class="new-badge" title="Encontrada en la última búsqueda">Nueva</span>' : ""}${esc(j.title)}</div><div class="company">${esc(j.company)}</div></td>
-      <td><div>${esc(region(j.location))}</div><div class="company">${esc(j.location || "")}</div></td>
-      <td class="num">${fmtDate(j.posted_date)}</td>
-      <td><span class="badge"><span class="swatch" style="background:${FIT_VAR[j.fit]}"></span>${FIT[j.fit] || "—"}</span><div class="status">${esc(STATUS[j.status] || j.status)}</div></td>
-      <td><div class="flags">${flags.map((f) => `<span class="${flagClass(f)}">${esc(f)}</span>`).join("")}</div></td>
-      <td>${url ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Abrir ↗</a>` : "—"}</td>
-    </tr>` + (openRow === j.key ? detailRow(j) : "");
-  }).join("");
-  tb.querySelectorAll("tr.row").forEach((tr) => tr.addEventListener("click", (e) => {
-    if (e.target.closest("a")) return;
-    openRow = openRow === tr.dataset.key ? null : tr.dataset.key;
-    renderTable(jobs);
-  }));
-}
-function detailRow(j) {
-  const list = (title, items) => items && items.length ? `<p style="margin:10px 0 0"><strong>${title}</strong></p><ul>${items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
-  return `<tr class="detail"><td colspan="7">
-    ${j.rank_verdict ? `<p style="margin:0"><strong>Evaluación:</strong> ${esc(j.rank_verdict)} (${esc(j.rank_score)}/100, ${esc(j.rank_date || "")})</p>` : ""}
-    ${j.snippet ? `<p style="margin:6px 0 0">${esc(j.snippet)}${j.snippet.length >= 600 ? "…" : ""}</p>` : '<p style="margin:0">Sin extracto de la descripción.</p>'}
-    ${list("Puntos fuertes", j.strengths)}${list("Carencias", j.gaps)}
-    <p class="status" style="margin:10px 0 0">Modalidad: ${esc(MODE_LABEL[modeOf(j)])}${j.work_mode ? "" : " (estimada)"} · portal: ${esc(j.portal || "—")} · vista por primera vez: ${esc(j.found_in_run ? fmtWhen(j.found_in_run) : j.first_seen || "—")} · clave: ${esc(j.key)}</p>
-  </td></tr>`;
-}
-document.querySelectorAll("th[data-sort]").forEach((th) => th.addEventListener("click", () => {
-  const k = th.dataset.sort;
-  sort = { key: k, dir: sort.key === k ? -sort.dir : (k === "title" || k === "region" ? 1 : -1) };
-  document.querySelectorAll("th[data-sort]").forEach((t) => t.removeAttribute("aria-sort"));
-  th.setAttribute("aria-sort", sort.dir > 0 ? "ascending" : "descending");
-  renderTable(filtered());
-}));
-
-// ---------- runs ----------
-function renderRuns() {
-  const runs = [...DATA.runs].reverse();
+  const runs = [...DATA.runs].reverse().slice(0, 8);
   const ref = lastRun();
   $("#runs").innerHTML = runs.length ? runs.map((r) => `<li>
-      <span class="when">${fmtWhen(r.started)}${r === ref ? ' <span class="new-badge" title="Sus ofertas son las marcadas como nuevas">Nuevas</span>' : ""}</span>
+      <span class="w">${fmtWhen(r.started)}</span>
       <span>${r.trigger === "timer" ? "Automática" : "Manual"}</span>
-      <span>${r.ok ? `+${r.new} nuevas (${r.high} alto, ${r.medium} medio)` : "Falló"}</span>
-      ${r.errors && r.errors.length ? `<details><summary>${r.errors.length} aviso${r.errors.length === 1 ? "" : "s"}</summary>${r.errors.map(esc).join("<br>")}</details>` : ""}
-    </li>`).join("") : '<li class="empty">Todavía no hay búsquedas registradas. Pulsa «Buscar ahora».</li>';
+      ${r.ok ? `<span>+${r.new} nuevas (${r.high} alto)</span>` : '<span class="bad">Falló</span>'}
+      ${r === ref ? `<span class="mark new" style="margin:0">${runIsToday(r) ? "Hoy" : "Última"}</span>` : ""}
+      ${r.errors && r.errors.length ? `<details><summary>${plural(r.errors.length, "aviso", "avisos")}</summary>${r.errors.map(esc).join("<br>")}</details>` : ""}
+    </li>`).join("") : '<li class="none">Todavía no hay búsquedas registradas.</li>';
 }
 
+// ---------- shell ----------
+const folio = () => new Date().toLocaleDateString("es-ES", { timeZone: TZ, weekday: "long", day: "numeric", month: "long" });
 function nextRunText() {
-  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", hour12: false });
-  const h = +fmt.format(new Date());
-  return `Próxima búsqueda automática: ${h < 13 ? "hoy" : "mañana"} a las 13:00`;
+  const h = +new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", hour12: false }).format(new Date());
+  return `próxima ${h < 13 ? "hoy" : "mañana"} a las 13:00`;
 }
-
-function render() {
-  const jobs = filtered();
-  renderKpis(jobs); renderPrefs(); renderCharts(jobs); renderTable(jobs); renderRuns();
-  const nNew = DATA.jobs.filter((j) => isNew(j) && OPEN.has(j.status) && !(matchPrefs && prefIssues(j).length)).length;
-  $("#new-n").textContent = lastRun() ? `(${nNew})` : "";
-  const last = DATA.runs[DATA.runs.length - 1];
-  $("#sub").textContent = last ? `Última búsqueda: ${fmtWhen(last.finished)}` : "Ofertas de LinkedIn y freehire puntuadas según tu CV";
-  $("#next").textContent = nextRunText();
+function renderShell() {
+  const r = lastRun();
+  const nNew = DATA.jobs.filter((j) => isNew(j) && OPEN.has(j.status) && !issues(j).length).length;
+  $("#meta").innerHTML = DATA.running
+    ? "<span>Buscando ofertas… tarda 2-4 minutos</span>"
+    : r ? `<span class="folio opt-m">${folio()}</span><span class="sep opt-m">·</span><span>Última búsqueda: ${esc(fmtWhen(r.finished || r.started))}</span><span class="sep">·</span><span>${plural(nNew, "nueva que cumple", "nuevas que cumplen")}</span><span class="sep opt-m">·</span><span class="opt-m">${nextRunText()}</span>`
+    : `<span class="folio">${folio()}</span><span class="sep">·</span><span>Sin búsquedas todavía</span><span class="sep">·</span><span>${nextRunText()}</span>`;
+  $("#n-open").textContent = `(${DATA.jobs.filter((j) => OPEN.has(j.status) && !(matchPrefs && issues(j).length)).length})`;
   const btn = $("#run");
   btn.disabled = DATA.running; btn.classList.toggle("busy", DATA.running);
-  $("#run-label").textContent = DATA.running ? "Buscando…" : "Buscar ahora";
+  $("#run-label").innerHTML = DATA.running ? "Buscando…" : 'Buscar<span class="lbl-l"> ahora</span>';
+}
+function render() {
+  const jobs = filtered();
+  renderShell(); renderMain(jobs); renderRail(jobs);
+}
+function setMatch(v) {
+  matchPrefs = v;
+  $("#match-prefs").setAttribute("aria-pressed", String(v));
+  render();
 }
 
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => (t.style.display = "none"), 5000); }
@@ -692,12 +917,12 @@ async function load() {
   DATA = await res.json();
   const portals = [...new Set(DATA.jobs.map((j) => j.portal).filter(Boolean))].sort();
   const sel = $("#portal"), cur = sel.value;
-  sel.innerHTML = '<option value="">Todos los portales</option>' + portals.map((p) => `<option value="${esc(p)}">${esc(p)}</option>`).join("");
+  sel.innerHTML = '<option value="">Todos los portales</option>' + portals.map((p) => `<option value="${esc(p)}">${esc(PORTAL_LABEL[p] || p)}</option>`).join("");
   sel.value = cur;
   render();
   if (wasRunning && !DATA.running) {
     const r = DATA.runs[DATA.runs.length - 1];
-    toast(r && r.ok ? `Búsqueda terminada: ${r.new} ofertas nuevas` : "La búsqueda terminó con errores; mira «Últimas búsquedas»");
+    toast(r && r.ok ? `Búsqueda terminada: ${plural(r.new, "oferta nueva", "ofertas nuevas")}` : "La búsqueda terminó con errores; mira «Últimas búsquedas»");
   }
   clearTimeout(pollTimer);
   pollTimer = setTimeout(() => load().catch(() => {}), DATA.running ? 4000 : 60000);
@@ -705,51 +930,110 @@ async function load() {
 
 $("#run").addEventListener("click", async () => {
   const res = await fetch("/api/run", { method: "POST", headers: { "X-Requested-With": "job-dashboard" } });
-  if (res.status === 202) { toast("Búsqueda iniciada; tarda 2-4 minutos"); DATA.running = true; render(); }
+  if (res.status === 202) { toast("Búsqueda iniciada; tarda 2-4 minutos"); DATA.running = true; renderShell(); }
   else if (res.status === 409) toast("Ya hay una búsqueda en marcha");
   else toast("No se pudo iniciar la búsqueda (HTTP " + res.status + ")");
   clearTimeout(pollTimer); pollTimer = setTimeout(() => load().catch(() => {}), 3000);
 });
 $("#q").addEventListener("input", render);
-$("#state").addEventListener("change", render);
 $("#portal").addEventListener("change", render);
-document.querySelectorAll(".chip[data-fit]").forEach((b) => b.addEventListener("click", () => {
+$("#order").addEventListener("change", render);
+document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
+  view = b.dataset.view; openRow = null;
+  document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  render();
+}));
+document.querySelectorAll(".tog[data-fit]").forEach((b) => b.addEventListener("click", () => {
   b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); render();
 }));
-$("#only-new").addEventListener("click", () => setOnlyNew(!onlyNew));
-$("#match-prefs").addEventListener("click", () => {
-  matchPrefs = !matchPrefs;
-  $("#match-prefs").setAttribute("aria-pressed", String(matchPrefs));
-  render();
-});
+$("#match-prefs").addEventListener("click", () => setMatch(!matchPrefs));
 
-// ---------- settings dialog ----------
+// ---------- requirements dialog ----------
+const LEVELS = [["off", "No filtrar"], ["soft", "Penalizar"], ["hard", "Descartar"]];
+// Presets set every rule at once; "require" stays off while it has no words.
+const PRESETS = {
+  flexible: { label: "Flexible", rules: { years: "soft", senior: "soft", english: "off", other_lang: "soft", salary: "soft", salary_unknown: "off", mode: "soft", zone: "soft", abroad: "soft", require: "soft", exclude: "hard", age: "off" } },
+  balanced: { label: "Equilibrado", rules: { years: "hard", senior: "hard", english: "soft", other_lang: "hard", salary: "hard", salary_unknown: "off", mode: "hard", zone: "hard", abroad: "hard", require: "soft", exclude: "hard", age: "soft" } },
+  strict: { label: "Estricto", rules: { years: "hard", senior: "hard", english: "hard", other_lang: "hard", salary: "hard", salary_unknown: "soft", mode: "hard", zone: "hard", abroad: "hard", require: "hard", exclude: "hard", age: "hard" } },
+};
+function presetName(rules) {
+  for (const p of Object.values(PRESETS)) {
+    if (Object.entries(p.rules).every(([k, v]) => rules[k] === v || (k === "require" && rules[k] === "off"))) return p.label;
+  }
+  return "Personalizado";
+}
 const dlg = $("#settings");
+document.querySelectorAll(".rule[data-rule]").forEach((row) => {
+  const name = row.dataset.rule;
+  const seg = document.createElement("div");
+  seg.className = "seg"; seg.setAttribute("role", "radiogroup"); seg.setAttribute("aria-label", "Dureza");
+  seg.innerHTML = LEVELS.map(([v, l]) => `<label><input type="radio" name="r-${name}" value="${v}">${l}</label>`).join("");
+  row.append(seg);
+  seg.addEventListener("change", syncDialog);
+});
+const ruleValue = (name) => document.querySelector(`input[name="r-${name}"]:checked`)?.value || "off";
+function setRule(name, level) {
+  document.querySelectorAll(`input[name="r-${name}"]`).forEach((r) => { r.checked = r.value === level; });
+}
+function dialogRules() {
+  return Object.fromEntries([...document.querySelectorAll(".rule[data-rule]")].map((r) => [r.dataset.rule, ruleValue(r.dataset.rule)]));
+}
+function syncDialog() {
+  const rules = dialogRules();
+  document.querySelectorAll(".rule[data-rule]").forEach((r) => r.classList.toggle("is-off", rules[r.dataset.rule] === "off"));
+  const name = presetName(rules);
+  document.querySelectorAll("[data-preset]").forEach((b) => b.setAttribute("aria-pressed", String(PRESETS[b.dataset.preset].label === name)));
+  $("#preset-note").textContent = name === "Personalizado" ? "Personalizado" : "";
+}
+document.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => {
+  const hasWords = $("#f-req").value.trim() !== "";
+  for (const [k, v] of Object.entries(PRESETS[b.dataset.preset].rules)) setRule(k, k === "require" && !hasWords ? "off" : v);
+  syncDialog();
+}));
+$("#f-req").addEventListener("input", () => {
+  if (!$("#f-req").value.trim()) setRule("require", "off");
+  else if (ruleValue("require") === "off") setRule("require", "hard");
+  syncDialog();
+});
 function openSettings() {
   const s = DATA.settings || {};
+  $("#f-years").value = s.max_years ?? 2;
   $("#f-salary").value = s.min_salary ?? 26000;
   $("#f-loc").value = (s.locations || []).join(", ");
   document.querySelectorAll("input[name=scope]").forEach((r) => { r.checked = r.value === (s.scope || "spain"); });
   document.querySelectorAll("input[name=mode]").forEach((c) => { c.checked = (s.work_modes || []).includes(c.value); });
+  document.querySelectorAll("input[name=portal]").forEach((c) => { c.checked = (s.portals || Object.keys(PORTAL_LABEL)).includes(c.value); });
+  $("#f-req").value = (s.require_keywords || []).join(", ");
   $("#f-excl").value = (s.exclude_keywords || []).join(", ");
-  $("#f-eng").checked = s.penalize_english !== false;
+  $("#f-age").value = s.max_age_days ?? 0;
+  $("#f-minscore").value = s.min_score ?? 0;
+  for (const [k, v] of Object.entries(s.rules || {})) setRule(k, v);
+  syncDialog();
   $("#dlg-error").textContent = "";
   dlg.showModal();
 }
 $("#open-settings").addEventListener("click", openSettings);
+$("#prefs-edit").addEventListener("click", openSettings);
 $("#dlg-cancel").addEventListener("click", () => dlg.close());
 $("#settings-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const err = $("#dlg-error");
   const modes = [...document.querySelectorAll("input[name=mode]:checked")].map((c) => c.value);
-  if (!modes.length) { err.textContent = "Elige al menos un tipo de trabajo."; return; }
+  if (!modes.length) { err.textContent = "Elige al menos una modalidad."; return; }
+  const portalsOn = [...document.querySelectorAll("input[name=portal]:checked")].map((c) => c.value);
+  if (!portalsOn.length) { err.textContent = "Elige al menos un portal."; return; }
   const body = {
+    max_years: Number($("#f-years").value),
     min_salary: Number($("#f-salary").value),
     locations: $("#f-loc").value,
     scope: document.querySelector("input[name=scope]:checked")?.value || "spain",
     work_modes: modes,
+    portals: portalsOn,
+    require_keywords: $("#f-req").value,
     exclude_keywords: $("#f-excl").value,
-    penalize_english: $("#f-eng").checked,
+    max_age_days: Number($("#f-age").value),
+    min_score: Number($("#f-minscore").value),
+    rules: dialogRules(),
   };
   const btn = $("#dlg-save");
   btn.disabled = true; err.textContent = "";
@@ -761,17 +1045,20 @@ $("#settings-form").addEventListener("submit", async (e) => {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) { err.textContent = data.error ? data.error[0].toUpperCase() + data.error.slice(1) + "." : `No se pudieron guardar (HTTP ${res.status}).`; return; }
-    DATA.settings = data;
     dlg.close();
-    render();
-    toast("Ajustes guardados. La próxima búsqueda los usará también para puntuar.");
+    await load();   // the server re-evaluates every posting with the new requirements
+    const ok = DATA.jobs.filter((j) => OPEN.has(j.status) && !issues(j).length).length;
+    toast(`Requisitos guardados: ${ok} ${ok === 1 ? "oferta pendiente los cumple" : "ofertas pendientes los cumplen"}.`);
   } catch (ex) {
     err.textContent = "No se pudieron guardar: " + ex.message;
   } finally {
     btn.disabled = false;
   }
 });
-load().catch((e) => { $("#sub").textContent = "No se pudieron cargar los datos: " + e.message; });
+load().catch((e) => {
+  $("#meta").textContent = "No se pudieron cargar los datos";
+  $("#main").innerHTML = `<div class="empty"><strong>No se pudieron cargar las ofertas</strong>${esc(e.message)}. Comprueba que el servidor del dashboard está en marcha y recarga la página.<br><button class="btn" onclick="location.reload()">Recargar</button></div>`;
+});
 </script>
 </body>
 </html>

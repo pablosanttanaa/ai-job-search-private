@@ -2,7 +2,11 @@
 """Job-search dashboard: serves dashboard/index.html plus a tiny JSON API.
 
     GET  /            the dashboard page
-    GET  /api/data      seen_jobs.json entries + run history + settings + whether a run is active
+    GET  /api/data      seen_jobs.json entries (each evaluated against the current
+                        settings, see tools/job_rules.py) + run history + settings +
+                        whether a run is active
+    GET  /api/cv/<key>.pdf  ATS-friendly CV tailored to that posting (tools/ats_cv.py)
+    GET  /fonts/<file>.woff2  the page's self-hosted font (dashboard/fonts/)
     GET  /api/settings  search preferences (job_scraper/settings.json, see tools/job_settings.py)
     PUT  /api/settings  validate and save search preferences (400 with a message if invalid)
     POST /api/run       start tools/daily_scrape.py in the background (409 if running)
@@ -19,18 +23,23 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import time
+from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
+import ats_cv  # noqa: E402
+import job_rules  # noqa: E402
 import job_settings  # noqa: E402
 
 PAGE = Path(__file__).resolve().parent / "index.html"
+FONTS = Path(__file__).resolve().parent / "fonts"
 STATE = ROOT / "job_scraper" / "seen_jobs.json"
 RUNS = ROOT / "job_scraper" / "runs.json"
 LOCK = ROOT / "job_scraper" / "scrape.lock"
@@ -38,6 +47,8 @@ LOG = ROOT / "job_scraper" / "last_run.log"
 SCRAPER = ROOT / "tools" / "daily_scrape.py"
 LOCK_STALE = 3600
 MAX_BODY = 16 * 1024
+FONT_PATH = re.compile(r"^/fonts/([a-z0-9-]{1,60}\.woff2)$")
+CV_PATH = re.compile(r"^/api/cv/([A-Za-z0-9_.-]{1,200})\.pdf$")
 
 _child: subprocess.Popen | None = None
 
@@ -47,6 +58,21 @@ def _read(path: Path, default):
         return json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         return default
+
+
+def evaluated_jobs() -> list[dict]:
+    """seen_jobs.json entries with the live evaluation; descriptions stay server-side."""
+    cfg = job_settings.load()
+    today = date.today()
+    base = ats_cv.load_base()
+    seen = _read(STATE, {"seen": {}}).get("seen", {})
+    jobs = []
+    for k, v in seen.items():
+        job = {"key": k, **{f: x for f, x in v.items() if f != "description"}}
+        job["eval"] = job_rules.evaluate(v, cfg, today)
+        job["keywords"] = {x: y for x, y in ats_cv.analyze(v, base).items() if x != "tags"}
+        jobs.append(job)
+    return jobs
 
 
 def running() -> bool:
@@ -75,14 +101,39 @@ class Handler(BaseHTTPRequestHandler):
         if path in ("/", "/index.html"):
             self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
         elif path == "/api/data":
-            seen = _read(STATE, {"seen": {}}).get("seen", {})
-            jobs = [{"key": k, **v} for k, v in seen.items()]
-            self._json(200, {"jobs": jobs, "runs": _read(RUNS, [])[-15:], "running": running(),
-                             "settings": job_settings.load()})
+            self._json(200, {"jobs": evaluated_jobs(), "runs": _read(RUNS, [])[-15:], "running": running(),
+                             "settings": job_settings.load(),
+                             # older runs.json/found_in_run stamps are naive server-local time
+                             "utc_offset_min": round(time.localtime().tm_gmtoff / 60)})
+        elif (m := FONT_PATH.match(path)) and (FONTS / m[1]).is_file():
+            body = (FONTS / m[1]).read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "font/woff2")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "public, max-age=31536000, immutable")
+            self.end_headers()
+            self.wfile.write(body)
+        elif m := CV_PATH.match(path):
+            self._cv(m[1])
         elif path == "/api/settings":
             self._json(200, job_settings.load())
         else:
             self._json(404, {"error": "not found"})
+
+    def _cv(self, key: str) -> None:
+        job = _read(STATE, {"seen": {}}).get("seen", {}).get(key)
+        if job is None:
+            return self._json(404, {"error": "oferta no encontrada"})
+        base = ats_cv.load_base()
+        pdf = ats_cv.to_pdf(ats_cv.build(job, base, date.today()))
+        self.send_response(200)
+        self.send_header("Content-Type", "application/pdf")
+        self.send_header("Content-Length", str(len(pdf)))
+        self.send_header("Content-Disposition", f'inline; filename="{ats_cv.filename(job, base)}"')
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.end_headers()
+        self.wfile.write(pdf)
 
     def _same_origin(self) -> bool:
         # A custom header forces a CORS preflight, so another site cannot

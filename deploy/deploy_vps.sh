@@ -17,7 +17,7 @@ cd "$ROOT"
 echo "==> Empaquetando y subiendo a $HOST:$DEST"
 tar czf - \
   --exclude=.git --exclude=node_modules --exclude='*.key' --exclude='*.pem' \
-  --exclude='.env' --exclude='*.lockb' --exclude=__pycache__ \
+  --exclude='.env' --exclude='*.lockb' --exclude=__pycache__ --exclude=.impeccable \
   --exclude=job_scraper/seen_jobs.json --exclude=job_scraper/runs.json \
   --exclude=job_scraper/scrape.lock --exclude=job_scraper/last_run.log \
   --exclude=job_scraper/settings.json \

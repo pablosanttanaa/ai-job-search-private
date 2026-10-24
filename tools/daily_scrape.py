@@ -26,7 +26,6 @@ import shutil
 import subprocess
 import sys
 import time
-import unicodedata
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -34,7 +33,10 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from job_key import make_key  # noqa: E402
-from job_settings import MODE_LABEL, load as load_settings  # noqa: E402
+from job_rules import (  # noqa: E402
+    CANARIAS, OFF_TARGET, RELEVANT, SENIOR, base_score, evaluate, extract_facts, matched_keyword, norm,
+)
+from job_settings import load as load_settings  # noqa: E402
 
 STATE = ROOT / "job_scraper" / "seen_jobs.json"
 RUNS = ROOT / "job_scraper" / "runs.json"
@@ -47,14 +49,15 @@ WINDOW_DAYS = 14
 MAX_DETAILS = 25          # LinkedIn detail fetches per run (keep volume low - ToS)
 LINKEDIN_PAUSE = 3        # seconds between LinkedIn calls
 LOCK_STALE = 3600         # a lock older than this is a crashed run
-CANDIDATE_START = date(2025, 2, 1)   # first day at Orbalia (CV)
+DESC_MAX = 8000           # description kept for the ATS CV keywords (not sent to the page)
 
 
 def build_queries(cfg: dict) -> list[tuple[str, str, list[str]]]:
     """(portal, label, args) - translated from search-queries.md priorities 1-3.
 
-    Remote-only queries are dropped when teletrabajo is not wanted, and the
-    local LinkedIn query follows the first configured location.
+    Remote-only queries are dropped when teletrabajo is not wanted, queries
+    for portals left out of the settings are dropped, and the local LinkedIn
+    query follows the first configured location.
     """
     remote = "remoto" in cfg["work_modes"]
     queries = [
@@ -74,203 +77,16 @@ def build_queries(cfg: dict) -> list[tuple[str, str, list[str]]]:
         first = cfg["locations"][0]
         where = "Canary Islands, Spain" if CANARIAS.search(first) else f"{first}, Spain"
         queries.insert(8, ("linkedin-search", first, ["-q", "desarrollador", "-l", where, "--jobage", "14"]))
-    return [q for q in queries if q]
+    return [q for q in queries if q and q[0] in cfg["portals"]]
 
-# --- scoring rules --------------------------------------------------------
+# --- scoring --------------------------------------------------------------
 
-OFF_TARGET = re.compile(
-    r"\bsap\b|dynamics|business central|salesforce|netsuite|administrativ|contab|contable|"
-    r"bookkeep|accountant|n[oó]minas|comercial|account (executive|manager)|sales|partnership|"
-    r"\bmmc\b|controller|fiscal|compras|marketing|recursos humanos|\.net\b|\bjava\b|\bphp\b|"
-    r"mecatr[oó]nic|auditor|cad\b",
-    re.I,
-)
-RELEVANT = re.compile(
-    r"odoo|python|\berp\b|desarrollador|developer|programador|backend|integraci|"
-    r"consultor|ingenier|engineer|software|sistemas",
-    re.I,
-)
-SENIOR = re.compile(r"\b(senior|sr\.?|lead|principal|principle|head|manager|jefe|staff|arquitect)", re.I)
-DEV_TITLE = re.compile(r"desarrollador|developer|programador|engineer|ingenier|t[eé]cnico.funcional|backend", re.I)
-ENGLISH_HIGH = re.compile(
-    r"ingl[eé]s\s*(?:\(|:|-)?\s*(?:alto|avanzado|fluido|nativo|biling|c1|c2|b2)|"
-    r"nivel\s+(?:alto|avanzado|medio-alto)\s+de\s+(?:espa[nñ]ol\s+e\s+)?ingl|"
-    r"b2-c1[^.]{0,30}ingl|ingl[eé]s[^.]{0,20}imprescindible|"
-    r"fluent\s+english|english\s+(?:fluency|proficiency)|proficiency\s+in\s+english|"
-    r"(?:clear|good|strong|excellent)\s+(?:written\s+and\s+spoken\s+)?english|working\s+english|"
-    r"english\s+(?:upper|advanced|c1|b2)",
-    re.I,
-)
-OTHER_LANGS = r"ucraniano|ukrainian|alem[aá]n|german|franc[eé]s|french|portugu[eé]s|portuguese|italiano|italian|polaco|polish|ruso|russian|neerland[eé]s|dutch"
-OTHER_LANG_REQUIRED = re.compile(
-    rf"(?:proficiency|imprescindible|required|fluent|nivel alto|dominio)[^.]{{0,60}}\b({OTHER_LANGS})\b|"
-    rf"\b({OTHER_LANGS})\b[^.]{{0,30}}(?:imprescindible|required|speaker|nativo)",
-    re.I,
-)
-WORD_NUM = {"un": 1, "uno": 1, "una": 1, "dos": 2, "tres": 3, "cuatro": 4, "cinco": 5, "seis": 6,
-            "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6}
-YEARS = re.compile(
-    r"(?:m[ií]nimo(?: de)?|al menos|m[aá]s de|at least|minimum(?: of)?)\s+(\d+|\w+)\s*\+?\s*(?:a[nñ]os|years)|"
-    r"(\d+)\s*\+\s*(?:a[nñ]os|years)|"
-    # "entre 1 y 3 años" / "1-3 years" is a nice-to-have band, not a floor
-    r"(?<!y )(?<!and )(?<!-)(?<!- )(?<!a )(?<!to )\b(\d+)\s*(?:a[nñ]os|years)\s+(?:de\s+experiencia|of\s+(?:commercial\s+|professional\s+)?(?:experience|python|odoo))",
-    re.I,
-)
-IN_SPAIN = re.compile(
-    r"spain|espa[nñ]a|\bES\b|\bES\d{2,3}\b|remot|europe|canari|madrid|barcelona|valencia|m[aá]laga|sevilla|"
-    r"bilbao|alicante|murcia|zaragoza|castell|le[oó]n|vigo|coru|asturias|navarra|pamplona|girona|"
-    r"tarragona|lleida|granada|c[aá]diz|baleares|mallorca|vizcaya|getxo|san sebasti|donostia",
-    re.I,
-)
-REMOTE = re.compile(r"100\s*%\s*remot|full(?:y)?\s*remote|modalidad remota|trabajo remoto|teletrabajo total|\bremote\b", re.I)
-HYBRID = re.compile(r"h[ií]brid|hybrid|d[ií]as? (?:en|de) (?:oficina|remoto|teletrabajo)", re.I)
-CANARIAS = re.compile(r"canari|las palmas|tenerife|gran canaria|lanzarote|fuerteventura", re.I)
-SALARY_CONTEXT = re.compile(r"salari|retribu|sueldo|brut|salary|compensation|€|\beur\b|euros", re.I)
-AMOUNT = re.compile(r"(\d{2,3})[.,](\d{3})(?!\d)|(\d{2,3})\s?k\b", re.I)
-
-
-def _norm(text: str) -> str:
-    return unicodedata.normalize("NFC", text or "")
-
-
-def _fold(text: str) -> str:
-    """Lower-case and strip accents, for keyword matching."""
-    return "".join(c for c in unicodedata.normalize("NFD", text or "") if not unicodedata.combining(c)).lower()
-
-
-def matched_keyword(text: str, keywords: list[str]) -> str | None:
-    folded = _fold(text)
-    return next((k for k in keywords if _fold(k) in folded), None)
-
-
-def work_mode(text: str) -> str:
-    """remoto / hibrido / presencial ("presencial" also covers "not stated")."""
-    if REMOTE.search(text):
-        return "remoto"
-    if HYBRID.search(text):
-        return "hibrido"
-    return "presencial"
-
-
-def candidate_years(today: date) -> float:
-    return (today - CANDIDATE_START).days / 365.25
-
-
-def required_years(desc: str) -> int | None:
-    found = []
-    for m in YEARS.finditer(desc):
-        raw = next(g for g in m.groups() if g)
-        n = int(raw) if raw.isdigit() else WORD_NUM.get(raw.lower())
-        if n and n <= 15:
-            found.append(n)
-    return max(found) if found else None
-
-
-def salary_range(desc: str) -> tuple[int, int] | None:
-    """Yearly amounts quoted in sentences that talk about pay, as (min, max)."""
-    amounts = []
-    for sentence in re.split(r"(?<=[.!?])\s+|\n+", desc):
-        if not SALARY_CONTEXT.search(sentence):
-            continue
-        for m in AMOUNT.finditer(sentence):
-            value = int(m[1]) * 1000 + int(m[2]) if m[1] else int(m[3]) * 1000
-            if 12000 <= value <= 250000:
-                amounts.append(value)
-    if not amounts:
-        return None
-    return min(amounts), max(amounts)
-
-
-def score(title: str, desc: str, location: str, today: date, cfg: dict) -> tuple[int, list[str], str, dict]:
-    """Return (0-100 score, flags, fit band, facts) for one posting.
-
-    `facts` holds what the dashboard needs to re-check a posting against
-    settings changed after it was scored: work_mode and the quoted salary.
-    """
-    text = f"{title}\n{desc}"
-    floor = cfg["min_salary"]
-    floor_k = f"{floor / 1000:g}k"
-    flags: list[str] = []
-    s = 30
-    if re.search(r"odoo", title, re.I):
-        s += 30
-    elif re.search(r"odoo", desc, re.I):
-        s += 15
-    if re.search(r"python", text, re.I):
-        s += 10
-    if re.search(r"postgre", text, re.I):
-        s += 5
-    if re.search(r"qweb|\bxml\b", text, re.I):
-        s += 4
-    if re.search(r"\bapi|integraci|xml-rpc|rest\b", text, re.I):
-        s += 4
-    if re.search(r"\baws\b|linux", text, re.I):
-        s += 3
-    if DEV_TITLE.search(title):
-        s += 8
-    if SENIOR.search(title):
-        s -= 20
-        flags.append("senior")
-
-    need = required_years(desc)
-    have = candidate_years(today)
-    if need and need > have:
-        if need > have + 0.5:
-            s -= min(25, round(12 * (need - have)))
-        flags.append(f"pide {need}+ años")
-
-    if location and not IN_SPAIN.search(location):
-        s -= 20
-        flags.append("fuera de España")
-
-    if ENGLISH_HIGH.search(text):
-        if cfg["penalize_english"]:
-            s -= 15
-        flags.append("⚠ inglés alto")
-    other = OTHER_LANG_REQUIRED.search(text)
-    if other:
-        lang = next(g for g in other.groups() if g)
-        flags.append(f"⚠ exige {lang.lower()}")
-
-    sal = salary_range(desc)
-    if sal:
-        lo, hi = sal
-        if hi < floor:
-            flags.append(f"salario {lo:,}–{hi:,} € < {floor_k}".replace(",", "."))
-        elif lo < floor:
-            s -= 5
-            flags.append(f"salario {lo:,}–{hi:,} € (baja de {floor_k})".replace(",", "."))
-        else:
-            s += 3
-            flags.append(f"salario {lo:,}–{hi:,} €".replace(",", "."))
-    else:
-        flags.append("salario no indicado")
-
-    mode = work_mode(text)
-    local = matched_keyword(f"{location}\n{title}", cfg["locations"])
-    if local:
-        s += 10
-        flags.append(f"en tu zona ({local})")
-    if mode == "remoto":
-        flags.append("remoto")
-        if "remoto" in cfg["work_modes"]:
-            s += 8
-    elif mode == "hibrido":
-        flags.append("híbrido")
-    if mode not in cfg["work_modes"]:
-        s -= 20
-        flags.append(f"modalidad no deseada ({MODE_LABEL[mode]})")
-    elif cfg["scope"] == "local" and mode != "remoto" and not local:
-        s -= 25
-        flags.append("fuera de tu zona")
-
-    s = max(0, min(100, s))
-    fit = "high" if s >= 70 else "medium" if s >= 45 else "low"
-    below_floor = bool(sal and sal[1] < floor)
-    if other or below_floor:
-        fit = "low"   # language gate / salary deal-breaker override skill fit
-    facts = {"work_mode": mode, "salary": sal, "below_floor": below_floor}
-    return s, flags, fit, facts
+def score(title: str, desc: str, location: str, today: date, cfg: dict) -> tuple[dict, int, dict]:
+    """Return (facts, base score, evaluation) for one posting - see tools/job_rules.py."""
+    facts = extract_facts(title, desc)
+    base = base_score(title, desc)
+    probe = {"title": title, "description": desc, "location": location, "facts": facts, "base_score": base}
+    return facts, base, evaluate(probe, cfg, today)
 
 
 # --- portal CLIs ----------------------------------------------------------
@@ -340,7 +156,7 @@ def main() -> int:
         print("Ya hay una búsqueda en marcha; salgo.")
         return 2
 
-    started = datetime.now().isoformat(timespec="seconds")
+    started = datetime.now().astimezone().isoformat(timespec="seconds")
     today = today_madrid()
     cutoff = today - timedelta(days=WINDOW_DAYS)
     errors: list[str] = []
@@ -372,40 +188,44 @@ def main() -> int:
 
         details = 0
         for url, (r, portal) in pool.items():
-            title = _norm(r.get("title") or "")
-            company = _norm(r.get("company") or "") or "unknown"
+            title = norm(r.get("title") or "")
+            company = norm(r.get("company") or "") or "unknown"
             key = make_key(company, title, url)
             if url in known_urls or key in seen:
                 continue
-            location = _norm(r.get("location") or "")
-            desc = _norm(r.get("description") or "")
+            location = norm(r.get("location") or "")
+            desc = norm(r.get("description") or "")
             status = "new"
-            facts: dict = {}
+            facts: dict | None = None
+            base = None
+            flags: list[str] = []
+            s, fit, out = 0, "low", True
             excluded = matched_keyword(title, cfg["exclude_keywords"])
-            if excluded:
-                s, flags, fit, status = 0, [f"excluida por «{excluded}»"], "low", "skipped"
-            elif OFF_TARGET.search(title) or not RELEVANT.search(title):
-                s, flags, fit, status = 0, ["fuera de perfil"], "low", "skipped"
+            rules = cfg["rules"]
+            if OFF_TARGET.search(title) or not RELEVANT.search(title):
+                flags, status = ["fuera de perfil"], "skipped"
             else:
-                if portal == "linkedin-search":
+                # A title a hard rule already discards does not spend a LinkedIn
+                # detail fetch; it is still stored, so relaxing the rule shows it.
+                title_out = (excluded and rules["exclude"] == "hard") or (SENIOR.search(title) and rules["senior"] == "hard")
+                if portal == "linkedin-search" and not title_out:
                     if details < MAX_DETAILS:
                         try:
                             time.sleep(LINKEDIN_PAUSE)
                             det = run_cli(bun, LINKEDIN, ["detail", str(r["id"])], timeout=90)
                             details += 1
-                            desc = _norm(det.get("description") or "")
+                            desc = norm(det.get("description") or "")
                             if det.get("isActive") is False:
                                 status = "expired"
                         except Exception as exc:
                             errors.append(f"detail {r['id']}: {exc}")
                     else:
                         errors.append(f"detail {r['id']}: tope de {MAX_DETAILS} alcanzado")
-                s, flags, fit, facts = score(title, desc, location, today, cfg)
+                facts, base, ev = score(title, desc, location, today, cfg)
+                s, fit, flags, out = ev["score"], ev["fit"], ev["flags"], bool(ev["excluded"])
                 if not desc:
                     flags.append("sin descripción")
-                if facts["below_floor"]:
-                    status = "skipped"
-            sal = facts.get("salary")
+            sal = facts.get("salary") if facts else None
             entry = {
                 "title": title,
                 "company": company,
@@ -419,16 +239,21 @@ def main() -> int:
                 "portal": portal,
                 "source": "cli",
                 "location": location or None,
+                # auto_* = evaluation with the settings at scrape time; the
+                # dashboard re-evaluates base_score + facts with current ones.
                 "auto_score": s,
                 "auto_flags": flags,
-                "work_mode": facts.get("work_mode"),
+                "base_score": base,
+                "facts": facts,
+                "work_mode": facts.get("work_mode") if facts else None,
                 "salary_min": sal[0] if sal else None,
                 "salary_max": sal[1] if sal else None,
                 "snippet": re.sub(r"\s+", " ", desc)[:600] or None,
+                "description": desc[:DESC_MAX] or None,
             }
             seen[key] = entry
             known_urls.add(url)
-            added.append(entry)
+            added.append((entry, out))
 
         if not args.dry_run:
             write_json(STATE, state)
@@ -439,10 +264,11 @@ def main() -> int:
     finally:
         LOCK.unlink(missing_ok=True)
 
-    shown = [e for e in added if e["status"] == "new"]
+    # Counted like the dashboard shows them: open and meeting the settings.
+    shown = [e for e, out in added if e["status"] == "new" and not out]
     run = {
         "started": started,
-        "finished": datetime.now().isoformat(timespec="seconds"),
+        "finished": datetime.now().astimezone().isoformat(timespec="seconds"),
         "trigger": args.trigger,
         "ok": ok,
         "added": len(added),

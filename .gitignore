@@ -129,3 +129,9 @@ company_research/*.json
 **/job_scraper/scrape.lock
 **/job_scraper/last_run.log
 **/job_scraper/settings.json
+
+# Impeccable working files (decision sketches, review captures, page state)
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/questions/
+.impeccable/hook.cache.json

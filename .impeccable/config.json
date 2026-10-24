@@ -1,0 +1,161 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T09:36:37.653Z",
+        "reason": "Claude: unchosen decision sketch of the category standard; Inter is intentional to depict the generic SaaS canon"
+      },
+      {
+        "rule": "kicker-above-heading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T09:36:38.672Z",
+        "reason": "Claude: unchosen decision sketch, not shipped; the shipped dashboard has no kicker"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-gate.html"
+        ],
+        "createdAt": "2026-10-24T09:56:08.671Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-gate.html"
+        ],
+        "createdAt": "2026-10-24T09:56:09.436Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-gate.html"
+        ],
+        "createdAt": "2026-10-24T09:56:10.159Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-gate.html"
+        ],
+        "createdAt": "2026-10-24T09:56:11.007Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T09:56:11.724Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T09:56:12.529Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T09:56:13.278Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T09:56:14.026Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T09:56:14.789Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T09:56:15.583Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T09:56:16.302Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T09:56:17.133Z",
+        "reason": "Claude: unchosen decision-round sketch of a different visual world; never shipped, kept as the round's spent hand"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-gate.html"
+        ],
+        "createdAt": "2026-10-24T09:56:17.856Z",
+        "reason": "Claude: unchosen sketch; stripes depict a boarding-pass barcode, never shipped"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T09:56:18.667Z",
+        "reason": "Claude: unchosen sketch, never shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0, 0, 0)",
+        "files": [
+          "dashboard/index.html"
+        ],
+        "createdAt": "2026-10-24T09:58:06.180Z",
+        "reason": "Claude: detector resolves .tog .sw border currentColor as black; it renders as the toggle's ink token (verified by documenter)"
+      }
+    ]
+  }
+}
